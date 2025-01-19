@@ -1,31 +1,26 @@
 <1>Peace Man!</h1>
 <img src="LightFruit.webp" alt="Light fruit from blox fruits" width="175" height="175" style="position: absolute; top: 100px; left: 500px;" />
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    .image1, .image2 {
-      width: 200px;
-      height: auto;
-      position: absolute;
-    }
-
-    .image1 {
-      top: 50px;
-      left: 50px;
-    }
-
-    .image2 {
-      top: 200px;
-      left: 300px;
-    }
-  </style>
-  <title>Images</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Image to Increment</title>
+    <script>
+        function incrementCount() {
+            fetch('/increment', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('count').textContent = data.count;
+                });
+        }
+    </script>
 </head>
 <body>
-  <img src="{{ url_for('static', filename='image1_resized.webp') }}" class="image1" alt="Image 1">
-  <img src="{{ url_for('static', filename='image2_resized.png') }}" class="image2" alt="Image 2">
+    <h1>Click the image to increment the number by 5!</h1>
+    <img src="LightFruit.webp" alt="LightFruit" width="300" height="300" onclick="incrementCount()">
+    <p>Current Count: <span id="count">0</span></p>
 </body>
 </html>
