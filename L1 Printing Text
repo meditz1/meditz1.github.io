@@ -1,3 +1,0 @@
-text="World"
-print("Hello world")
-print("Hello "+text+"!")
