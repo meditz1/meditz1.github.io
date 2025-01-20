@@ -2,11 +2,6 @@
 
 
 
-Got it, Marvin! 😊 Here's how you can set up **41 images** with the same functionality. I'll include all the images, each with a unique `data-id` and increment value for simplicity.
-
-### Updated Code with 41 Images:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,8 +22,8 @@ Got it, Marvin! 😊 Here's how you can set up **41 images** with the same funct
         /* Style for each image */
         .clickable-image {
             cursor: pointer; /* Shows a hand cursor on hover */
-            width: 200px;  /* Set the image size */
-            height: 200px; /* Set the image size */
+            width: 175px;  /* Set the image size */
+            height: 175px; /* Set the image size */
             transition: transform 0.2s ease; /* Smooth scale effect */
         }
 
@@ -37,7 +32,7 @@ Got it, Marvin! 😊 Here's how you can set up **41 images** with the same funct
             transform: scale(1.1); /* Slightly enlarges the image when hovered */
         }
 
-        /* Style for counters */
+        /* Style for counter */
         p {
             font-size: 18px;
             font-family: Arial, sans-serif;
@@ -49,7 +44,6 @@ Got it, Marvin! 😊 Here's how you can set up **41 images** with the same funct
     <!-- Container for images -->
     <div class="image-container">
         <!-- 41 Images -->
-        <!-- Increment values are set based on their position -->
         <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="1" data-increment="5" />
         <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="2" data-increment="10" />
         <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="3" data-increment="15" />
@@ -93,61 +87,22 @@ Got it, Marvin! 😊 Here's how you can set up **41 images** with the same funct
         <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="41" data-increment="205" />
     </div>
 
-    <!-- Counters for each image -->
-    <p>Counter 1: <span id="counter-1">0</span></p>
-    <p>Counter 2: <span id="counter-2">0</span></p>
-    <p>Counter 3: <span id="counter-3">0</span></p>
-    <p>Counter 4: <span id="counter-4">0</span></p>
-    <p>Counter 5: <span id="counter-5">0</span></p>
-    <p>Counter 6: <span id="counter-6">0</span></p>
-    <p>Counter 7: <span id="counter-7">0</span></p>
-    <p>Counter 8: <span id="counter-8">0</span></p>
-    <p>Counter 9: <span id="counter-9">0</span></p>
-    <p>Counter 10: <span id="counter-10">0</span></p>
-    <p>Counter 11: <span id="counter-11">0</span></p>
-    <p>Counter 12: <span id="counter-12">0</span></p>
-    <p>Counter 13: <span id="counter-13">0</span></p>
-    <p>Counter 14: <span id="counter-14">0</span></p>
-    <p>Counter 15: <span id="counter-15">0</span></p>
-    <p>Counter 16: <span id="counter-16">0</span></p>
-    <p>Counter 17: <span id="counter-17">0</span></p>
-    <p>Counter 18: <span id="counter-18">0</span></p>
-    <p>Counter 19: <span id="counter-19">0</span></p>
-    <p>Counter 20: <span id="counter-20">0</span></p>
-    <p>Counter 21: <span id="counter-21">0</span></p>
-    <p>Counter 22: <span id="counter-22">0</span></p>
-    <p>Counter 23: <span id="counter-23">0</span></p>
-    <p>Counter 24: <span id="counter-24">0</span></p>
-    <p>Counter 25: <span id="counter-25">0</span></p>
-    <p>Counter 26: <span id="counter-26">0</span></p>
-    <p>Counter 27: <span id="counter-27">0</span></p>
-    <p>Counter 28: <span id="counter-28">0</span></p>
-    <p>Counter 29: <span id="counter-29">0</span></p>
-    <p>Counter 30: <span id="counter-30">0</span></p>
-    <p>Counter 31: <span id="counter-31">0</span></p>
-    <p>Counter 32: <span id="counter-32">0</span></p>
-    <p>Counter 33: <span id="counter-33">0</span></p>
-    <p>Counter 34: <span id="counter-34">0</span></p>
-    <p>Counter 35: <span id="counter-35">0</span></p>
-    <p>Counter 36: <span id="counter-36">0</span></p>
-    <p>Counter 37: <span id="counter-37">0</span></p>
-    <p>Counter 38: <span id="counter-38">0</span></p>
-    <p>Counter 39: <span id="counter-39">0</span></p>
-    <p>Counter 40: <span id="counter-40">0</span></p>
-    <p>Counter 41: <span id="counter-41">0</span></p>
+    <!-- Total counter -->
+    <p>Total Amount Added: <span id="total-counter">0</span></p>
 
     <script>
-        // Initialize counters for each image
-        let counters = {};
-        for (let i = 1; i <= 41; i++) {
-            counters[i] = 0;
-        }
+        // Initialize the total counter
+        let totalCounter = 0;
 
         // Function to handle the click event for each image
         document.querySelectorAll('.clickable-image').forEach(image => {
             image.addEventListener('click', () => {
-                let imageId = image.getAttribute('data-id'); // Get the unique ID for the image
                 let incrementValue = parseInt(image.getAttribute('data-increment')); // Get the increment value for this image
-                counters[imageId] += incrementValue; // Increment the counter
+                totalCounter += incrementValue; // Add the increment value to the total counter
+                document.getElementById('total-counter').innerText = totalCounter; // Update the displayed total counter
+            });
+        });
+    </script>
+    
 </body>
 </html>
