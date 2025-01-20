@@ -1,11 +1,14 @@
-<1>SUP!</h1>
-    
+<1>again and again!</h1>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Click Image</title>
+    
     <style>
         .clickable-image {
             cursor: pointer; /* Shows a hand cursor on hover */
@@ -18,28 +21,41 @@
     </style>
 </head>
 <body>
-    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="1" />
-    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="2" />
-    
+
+    <!-- Multiple Images -->
+    <!-- Image 1 with increment of 5 -->
+    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="1" data-increment="5" />
+    <!-- Image 2 with increment of 10 -->
+    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="2" data-increment="10" />
+    <!-- Image 3 with increment of 15 -->
+    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="3" data-increment="15" />
+    <!-- Add more images as needed -->
+
+    <!-- Counters for each image -->
     <p>Counter 1: <span id="counter-1">0</span></p>
     <p>Counter 2: <span id="counter-2">0</span></p>
+    <p>Counter 3: <span id="counter-3">0</span></p>
+    <!-- Add more counters as needed -->
 
     <script>
         // Initialize counters for each image
         let counters = {
             1: 0,
-            2: 0
+            2: 0,
+            3: 0
+            // Add more counters as you add images
         };
 
-        // Function to handle the click event
+        // Function to handle the click event for each image
         document.querySelectorAll('.clickable-image').forEach(image => {
             image.addEventListener('click', () => {
                 let imageId = image.getAttribute('data-id'); // Get the unique ID for the image
-                counters[imageId] += 5; // Increment the counter by 5
+                let incrementValue = parseInt(image.getAttribute('data-increment')); // Get the increment value for this image
+                counters[imageId] += incrementValue; // Increment the counter by the defined amount
                 document.getElementById('counter-' + imageId).innerText = counters[imageId]; // Update the displayed counter
             });
         });
     </script>
+    
 </body>
 </html>
-
