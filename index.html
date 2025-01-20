@@ -1,24 +1,45 @@
-<1>Greetings!</h1>
+<1>SUP!</h1>
     
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click Image to Increment</title>
-    <script>
-        function incrementCount() {
-            fetch('/increment', { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('count').textContent = data.count;
-                });
+    <title>Click Image</title>
+    <style>
+        .clickable-image {
+            cursor: pointer; /* Shows a hand cursor on hover */
+            transition: transform 0.2s ease; /* Smooth scale effect */
         }
-    </script>
+
+        .clickable-image:hover {
+            transform: scale(1.1); /* Slightly enlarges the image when hovered */
+        }
+    </style>
 </head>
 <body>
-    <h1>Click the image to increment the number by 5!</h1>
-    <img src="LightFruit.webp" alt="LightFruit" width="300" height="300" onclick="incrementCount()">
-    <p>Current Count: <span id="count">0</span></p>
+    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="1" />
+    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="2" />
+    
+    <p>Counter 1: <span id="counter-1">0</span></p>
+    <p>Counter 2: <span id="counter-2">0</span></p>
+
+    <script>
+        // Initialize counters for each image
+        let counters = {
+            1: 0,
+            2: 0
+        };
+
+        // Function to handle the click event
+        document.querySelectorAll('.clickable-image').forEach(image => {
+            image.addEventListener('click', () => {
+                let imageId = image.getAttribute('data-id'); // Get the unique ID for the image
+                counters[imageId] += 5; // Increment the counter by 5
+                document.getElementById('counter-' + imageId).innerText = counters[imageId]; // Update the displayed counter
+            });
+        });
+    </script>
 </body>
 </html>
+
