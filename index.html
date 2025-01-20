@@ -10,26 +10,47 @@
     <title>Click Image</title>
     
     <style>
+        /* Container for images */
+        .image-container {
+            display: flex; 
+            flex-wrap: wrap;  /* Allow images to wrap onto new lines */
+            justify-content: center;  /* Center the images */
+            gap: 20px;  /* Add space between images */
+            padding: 20px;  /* Optional: adds space around the container */
+        }
+
+        /* Style for each image */
         .clickable-image {
             cursor: pointer; /* Shows a hand cursor on hover */
+            width: 200px;  /* Set the image size */
+            height: 200px; /* Set the image size */
             transition: transform 0.2s ease; /* Smooth scale effect */
         }
 
+        /* Hover effect */
         .clickable-image:hover {
             transform: scale(1.1); /* Slightly enlarges the image when hovered */
+        }
+
+        /* Style for counters */
+        p {
+            font-size: 18px;
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 <body>
 
-    <!-- Multiple Images -->
-    <!-- Image 1 with increment of 5 -->
-    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="1" data-increment="5" />
-    <!-- Image 2 with increment of 10 -->
-    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="2" data-increment="10" />
-    <!-- Image 3 with increment of 15 -->
-    <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="3" data-increment="15" />
-    <!-- Add more images as needed -->
+    <!-- Container for images -->
+    <div class="image-container">
+        <!-- Image 1 with increment of 5 -->
+        <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="1" data-increment="5" />
+        <!-- Image 2 with increment of 10 -->
+        <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="2" data-increment="10" />
+        <!-- Image 3 with increment of 15 -->
+        <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="3" data-increment="15" />
+        <!-- Add more images as needed -->
+    </div>
 
     <!-- Counters for each image -->
     <p>Counter 1: <span id="counter-1">0</span></p>
