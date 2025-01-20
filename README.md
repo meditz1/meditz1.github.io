@@ -9,7 +9,6 @@
 ![image alt](https://static.wikia.nocookie.net/roblox-blox-piece/images/0/02/SpiritFruit.png/revision/latest?cb=20240304190559)
 ![image alt](https://static.wikia.nocookie.net/roblox-blox-piece/images/d/d3/MammothFruit.png/revision/latest?cb=20231027115702)
 ![image alt](https://static.wikia.nocookie.net/roblox-blox-piece/images/b/b7/VenomFruit.png/revision/latest?cb=20231027120425)
-![image alt](https://static.wikia.nocookie.net/roblox-blox-piece/images/b/b7/VenomFruit.png/revision/latest?cb=20231027120425)
 ![image alt](https://static.wikia.nocookie.net/roblox-blox-piece/images/e/e4/PortalFruit.png/revision/latest?cb=20231027115746)
 ![image alt](https://static.wikia.nocookie.net/roblox-blox-piece/images/6/6e/BuddhaFruit.png/revision/latest?cb=20231027115325)
 ![image alt](https://static.wikia.nocookie.net/roblox-blox-piece/images/2/2d/ShadowFruit.png/revision/latest?cb=20231102204401)
