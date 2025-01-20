@@ -11,7 +11,6 @@
 ![LoveFruit](https://github.com/user-attachments/assets/a6c38c93-b555-4637-9b43-9328d568df53)
 ![LeopardFruit](https://github.com/user-attachments/assets/659f30c3-beb5-4d19-bc42-1c32d8f5b046)
 ![KitsuneFruit](https://github.com/user-attachments/assets/6ecf82ce-62ee-40fb-a16e-41c8259f8d32)
-![GasFruit](https://github.com/user-attachments/assets/f3d5f7cb-5aa8-4b02-bf16-22f9fb59bbc2)
 ![SoundFruit](https://github.com/user-attachments/assets/217d9894-7f40-4658-b7d0-8d0d510cb07b)
 ![SpiderFruit](https://github.com/user-attachments/assets/24456577-491b-4228-93cd-279e577cea26)
 ![SpiritFruit](https://github.com/user-attachments/assets/5e958a5d-cb30-40c7-abf5-50bd04f96a54)
