@@ -1,7 +1,6 @@
 <1>again and again!</h1>
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +9,23 @@
     <title>Click Image</title>
     
     <style>
+        /* Style for the body */
+        body {
+            text-align: center; /* Center-align text */
+            font-family: Arial, sans-serif; /* Set the font for the page */
+        }
+
+        /* Style for the total counter */
+        .total-counter {
+            font-size: 24px;
+            margin-bottom: 20px; /* Adds space below the counter */
+            padding: 10px;
+            background-color: #f0f0f0; /* Light background for the counter */
+            border-radius: 5px; /* Optional: rounds the corners of the counter box */
+            display: inline-block;
+            width: auto;
+        }
+
         /* Container for images */
         .image-container {
             display: flex; 
@@ -22,8 +38,8 @@
         /* Style for each image */
         .clickable-image {
             cursor: pointer; /* Shows a hand cursor on hover */
-            width: 175px;  /* Set the image size */
-            height: 175px; /* Set the image size */
+            width: 150px;  /* Set the image size */
+            height: 150px; /* Set the image size */
             transition: transform 0.2s ease; /* Smooth scale effect */
         }
 
@@ -31,15 +47,14 @@
         .clickable-image:hover {
             transform: scale(1.1); /* Slightly enlarges the image when hovered */
         }
-
-        /* Style for counter */
-        p {
-            font-size: 18px;
-            font-family: Arial, sans-serif;
-        }
     </style>
 </head>
 <body>
+
+    <!-- Total counter displayed at the top center -->
+    <div class="total-counter">
+        Total Amount Added: <span id="total-counter">0</span>
+    </div>
 
     <!-- Container for images -->
     <div class="image-container">
@@ -86,9 +101,6 @@
         <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="40" data-increment="200" />
         <img src="LightFruit.webp" alt="Click me" class="clickable-image" data-id="41" data-increment="205" />
     </div>
-
-    <!-- Total counter -->
-    <p>Total Amount Added: <span id="total-counter">0</span></p>
 
     <script>
         // Initialize the total counter
