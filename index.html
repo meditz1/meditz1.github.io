@@ -1,87 +1,148 @@
-<1>im done!</h1>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click Image</title>
-    
+    <title>Image Game</title>
     <style>
-        /* Style for the body */
-        body {
-            text-align: center; /* Center-align text */
-            font-family: Arial, sans-serif; /* Set the font for the page */
+        /* Add your CSS styles here */
+        #gameArea {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background-color: lightgray;
         }
-
-        /* Style for the total counter */
-        .total-counter {
-            font-size: 24px;
-            margin-bottom: 20px; /* Adds space below the counter */
-            padding: 10px;
-            background-color: #f0f0f0; /* Insert background for the counter */
-            border-radius: 5px; /* Optional: rounds the corners of the counter box */
-            display: inline-block;
-            width: auto;
-        }
-
-        /* Container for images */
-        .image-container {
-            display: flex; 
-            flex-wrap: wrap;  /* Allow images to wrap onto new lines */
-            justify-content: center;  /* Center the images */
-            gap: 20px;  /* Add space between images */
-            padding: 20px;  /* Optional: adds space around the container */
-        }
-
-        /* Style for each image */
-        .clickable-image {
-            cursor: pointer; /* Shows a hand cursor on hover */
-            width: 150px;  /* Set the image size */
-            height: 150px; /* Set the image size */
-            transition: transform 0.2s ease; /* Smooth scale effect */
-        }
-
-        /* Hover effect */
-        .clickable-image:hover {
-            transform: scale(1.1); /* SInsertly enlarges the image when hovered */
+        .image {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- Total counter displayed at the top center -->
-    <div class="total-counter">
-        Total Amount Added: <span id="total-counter">0</span>
-    </div>
+    <div id="gameArea"></div>
+    <div id="inventory"></div>
+    <div id="money">0</div>
 
-    <!-- Container for images -->
-    <div class="image-container">
-        <!-- 41 Images -->
-<img src="" alt="Dragon_%28East%29Fruit.jpg" class="clickable-image" data-id="1" data-increment="5" />
-<img src="" alt="https://github.com/meditz1/meditz1.github.io/blob/e536b4ceb47b330396ee19c044e44ac59f492f2b/KitsuneFruit.jpg" data-id="2" data-increment="10" />
-<img src="" alt="YetiFruit.jpg" data-id="3" data-increment="15" />
-<img src="" alt="Click" class="clickable-image" data-id="4" data-increment="20" />
-<img src="" alt="Click" class="clickable-image" data-id="5" data-increment="25" />
-<img src="" alt="Click" class="clickable-image" data-id="6" data-increment="30" />
-<img src="" alt="Click" class="clickable-image" data-id="7" data-increment="35" />
-<img src="" alt="Click" class="clickable-image" data-id="8" data-increment="40" />
-
-        
     <script>
-        // Initialize the total counter
-        let totalCounter = 0;
+        const rarities = {
+            common: 50, // 50% chance
+            uncommon: 30, // 30% chance
+            rare: 10, // 10% chance
+            epic: 5, // 5% chance
+            legendary: 4, // 4% chance
+            ultra: 0.5, // 0.5% chance
+        };
 
-        // Function to handle the click event for each image
-        document.querySelectorAll('.clickable-image').forEach(image => {
-            image.addEventListener('click', () => {
-                let incrementValue = parseInt(image.getAttribute('data-increment')); // Get the increment value for this image
-                totalCounter += incrementValue; // Add the increment value to the total counter
-                document.getElementById('total-counter').innerText = totalCounter; // Update the displayed total counter
+        // Images for each rarity
+        const images = {
+            common: [
+                'Untitled presentation_page-0001_result.jpg', 'Untitled presentation_page-0002_result.jpg', 'Untitled presentation_page-0003_result.jpg',
+                'Untitled presentation_page-0004_result.jpg', 'Untitled presentation_page-0005_result.jpg', 'Untitled presentation_page-0006_result.jpg',
+                'Untitled presentation_page-0007_result.jpg', 'Untitled presentation_page-0008_result.jpg', 'Untitled presentation_page-0009_result.jpg',
+                'Untitled presentation_page-0010_result.jpg'
+            ],
+            uncommon: [
+                'Untitled presentation_page-0011_result.jpg', 'Untitled presentation_page-0012_result.jpg', 'Untitled presentation_page-0013_result.jpg',
+                'Untitled presentation_page-0014_result.jpg', 'Untitled presentation_page-0015_result.jpg', 'Untitled presentation_page-0016_result.jpg',
+                'Untitled presentation_page-0017_result.jpg', 'Untitled presentation_page-0018_result.jpg', 'Untitled presentation_page-0019_result.jpg',
+                'Untitled presentation_page-0020_result.jpg'
+            ],
+            rare: [
+                'Untitled presentation_page-0021_result.jpg', 'Untitled presentation_page-0022_result.jpg', 'Untitled presentation_page-0023_result.jpg',
+                'Untitled presentation_page-0024_result.jpg', 'Untitled presentation_page-0025_result.jpg', 'Untitled presentation_page-0026_result.jpg',
+                'Untitled presentation_page-0027_result.jpg', 'Untitled presentation_page-0028_result.jpg', 'Untitled presentation_page-0029_result.jpg',
+                'Untitled presentation_page-0030_result.jpg'
+            ],
+            epic: [
+                'Untitled presentation_page-0031_result.jpg', 'Untitled presentation_page-0032_result.jpg', 'Untitled presentation_page-0033_result.jpg',
+                'Untitled presentation_page-0034_result.jpg', 'Untitled presentation_page-0035_result.jpg', 'Untitled presentation_page-0036_result.jpg',
+                'Untitled presentation_page-0037_result.jpg', 'Untitled presentation_page-0038_result.jpg', 'Untitled presentation_page-0039_result.jpg',
+                'Untitled presentation_page-0040_result.jpg'
+            ],
+            legendary: [
+                'Untitled presentation_page-0041_result.jpg', 'Untitled presentation_page-0042_result.jpg', 'Untitled presentation_page-0043_result.jpg',
+                'Untitled presentation_page-0044_result.jpg', 'Untitled presentation_page-0045_result.jpg', 'Untitled presentation_page-0046_result.jpg',
+                'Untitled presentation_page-0047_result.jpg', 'Untitled presentation_page-0048_result.jpg', 'Untitled presentation_page-0049_result.jpg',
+                'Untitled presentation_page-0050_result.jpg'
+            ],
+            ultra: [
+                'Untitled presentation_page-0051_result.jpg', 'Untitled presentation_page-0052_result.jpg', 'Untitled presentation_page-0053_result.jpg',
+                'Untitled presentation_page-0054_result.jpg', 'Untitled presentation_page-0055_result.jpg', 'Untitled presentation_page-0056_result.jpg',
+                'Untitled presentation_page-0057_result.jpg', 'Untitled presentation_page-0058_result.jpg', 'Untitled presentation_page-0059_result.jpg',
+                'Untitled presentation_page-0060_result.jpg'
+            ],
+        };
+
+        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+        let money = parseInt(localStorage.getItem('money')) || 0;
+
+        // Function to select rarity based on weighted probabilities
+        function getRandomRarity() {
+            const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
+            let randomWeight = Math.random() * totalWeight;
+
+            for (const rarity in rarities) {
+                randomWeight -= rarities[rarity];
+                if (randomWeight <= 0) {
+                    return rarity;
+                }
+            }
+        }
+
+        // Function to get a random image filename based on the selected rarity
+        function getRandomImage() {
+            const rarity = getRandomRarity();
+            const image = images[rarity][Math.floor(Math.random() * 10)];
+            return { rarity, image };
+        }
+
+        function displayImage() {
+            const { rarity, image } = getRandomImage();
+            const imgElement = document.createElement('img');
+            imgElement.src = image;
+            imgElement.className = 'image';
+            imgElement.alt = rarity;
+            imgElement.style.top = `${Math.random() * 350}px`;
+            imgElement.style.left = `${Math.random() * 550}px`;
+
+            imgElement.onclick = function() {
+                addToInventory(image);
+                imgElement.remove();
+            };
+
+            document.getElementById('gameArea').appendChild(imgElement);
+        }
+
+        function addToInventory(image) {
+            inventory.push(image);
+            money++;
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+            localStorage.setItem('money', money);
+            document.getElementById('money').innerText = money;
+            updateInventory();
+        }
+
+        function updateInventory() {
+            const inventoryArea = document.getElementById('inventory');
+            inventoryArea.innerHTML = '';
+            inventory.forEach(image => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image;
+                inventoryArea.appendChild(imgElement);
             });
-        });
+        }
+
+        window.onload = function() {
+            document.getElementById('money').innerText = money;
+            updateInventory();
+            setInterval(displayImage, 60000); // Display new image every minute
+        };
     </script>
-    
+
 </body>
 </html>
+
+
