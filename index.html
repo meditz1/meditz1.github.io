@@ -14,8 +14,8 @@
         }
         .image {
             position: absolute;
-            width: 25px;
-            height: 25px;
+            width: 15px;
+            height: 15px;
             cursor: pointer;
         }
     </style>
@@ -168,8 +168,8 @@ function updateInventory() {
     inventory.forEach(image => {
         const imgElement = document.createElement('img');
         imgElement.src = image;
-        imgElement.style.width = '50px'; // Adjust the size here
-        imgElement.style.height = '50px'; // Adjust the size here
+        imgElement.style.width = '40px'; // Adjust the size here
+        imgElement.style.height = '40px'; // Adjust the size here
         inventoryArea.appendChild(imgElement);
     });
 }
