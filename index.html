@@ -162,15 +162,18 @@ const images = {
             updateInventory();
         }
 
-        function updateInventory() {
-            const inventoryArea = document.getElementById('inventory');
-            inventoryArea.innerHTML = '';
-            inventory.forEach(image => {
-                const imgElement = document.createElement('img');
-                imgElement.src = image;
-                inventoryArea.appendChild(imgElement);
-            });
-        }
+function updateInventory() {
+    const inventoryArea = document.getElementById('inventory');
+    inventoryArea.innerHTML = '';
+    inventory.forEach(image => {
+        const imgElement = document.createElement('img');
+        imgElement.src = image;
+        imgElement.style.width = '50px'; // Adjust the size here
+        imgElement.style.height = '50px'; // Adjust the size here
+        inventoryArea.appendChild(imgElement);
+    });
+}
+
 
         window.onload = function() {
             document.getElementById('money').innerText = money;
