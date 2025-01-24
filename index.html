@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Game</title>
     <style>
-        /* Add your CSS styles here */
         #gameArea {
             position: relative;
             width: 800px;
@@ -18,25 +17,49 @@
             height: 15px;
             cursor: pointer;
         }
+        #money {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #inventory {
+            margin-top: 20px;
+        }
+        .inventory-item {
+            display: inline-block;
+            text-align: center;
+            margin: 5px;
+        }
+        .inventory-item img {
+            width: 40px;
+            height: 40px;
+            display: block;
+        }
+        .sell-button {
+            font-size: 12px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <div id="gameArea"></div>
-    <div id="inventory"></div>
     <div id="money">0</div>
+    <div id="inventory"></div>
 
     <script>
         const rarities = {
-            common: 73.89, // 50% chance
-            uncommon: 20, // 30% chance
-            rare: 5, // 10% chance
-            epic: 1, // 5% chance
-            legendary: 0.1, // 4% chance
-            ultra: 0.01, // 0.5% chance
+            common: 73.89,
+            uncommon: 20,
+            rare: 5,
+            epic: 1,
+            legendary: 0.1,
+            ultra: 0.01,
         };
 
-        // Images for each rarity
 const images = {
   common: [
     'https://github.com/user-attachments/assets/11dc033a-d7d7-48b5-a4bd-128bbc98465b',
@@ -112,11 +135,9 @@ const images = {
   ]
 };
 
-
         let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
         let money = parseInt(localStorage.getItem('money')) || 0;
 
-        // Function to select rarity based on weighted probabilities
         function getRandomRarity() {
             const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
             let randomWeight = Math.random() * totalWeight;
@@ -129,7 +150,6 @@ const images = {
             }
         }
 
-        // Function to get a random image filename based on the selected rarity
         function getRandomImage() {
             const rarity = getRandomRarity();
             const image = images[rarity][Math.floor(Math.random() * 10)];
@@ -155,6 +175,35 @@ const images = {
 
         function addToInventory(image) {
             inventory.push(image);
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+            updateInventory();
+        }
+
+        function updateInventory() {
+            const inventoryArea = document.getElementById('inventory');
+            inventoryArea.innerHTML = '';
+            inventory.forEach((image, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item';
+
+                const imgElement = document.createElement('img');
+                imgElement.src = image;
+
+                const sellButton = document.createElement('button');
+                sellButton.className = 'sell-button';
+                sellButton.innerText = 'Sell';
+                sellButton.onclick = function() {
+                    sellItem(index);
+                };
+
+                itemDiv.appendChild(imgElement);
+                itemDiv.appendChild(sellButton);
+                inventoryArea.appendChild(itemDiv);
+            });
+        }
+
+        function sellItem(index) {
+            inventory.splice(index, 1);
             money++;
             localStorage.setItem('inventory', JSON.stringify(inventory));
             localStorage.setItem('money', money);
@@ -162,23 +211,10 @@ const images = {
             updateInventory();
         }
 
-function updateInventory() {
-    const inventoryArea = document.getElementById('inventory');
-    inventoryArea.innerHTML = '';
-    inventory.forEach(image => {
-        const imgElement = document.createElement('img');
-        imgElement.src = image;
-        imgElement.style.width = '40px'; // Adjust the size here
-        imgElement.style.height = '40px'; // Adjust the size here
-        inventoryArea.appendChild(imgElement);
-    });
-}
-
-
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
-            setInterval(displayImage, 6000); // Display new image every minute
+            setInterval(displayImage, 6000);
         };
     </script>
 
