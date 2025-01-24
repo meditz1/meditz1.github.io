@@ -14,8 +14,8 @@
         }
         .image {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 25px;
+            height: 25px;
             cursor: pointer;
         }
     </style>
@@ -175,7 +175,7 @@ const images = {
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
-            setInterval(displayImage, 600); // Display new image every minute
+            setInterval(displayImage, 6000); // Display new image every minute
         };
     </script>
 
