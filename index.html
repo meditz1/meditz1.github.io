@@ -37,80 +37,81 @@
         };
 
         // Images for each rarity
-        const images = {
- common: [
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0001_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0002_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0003_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0004_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0005_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0006_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0007_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0008_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0009_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0010_result.jpg'
-            ],
-            uncommon: [
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0011_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0012_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0013_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0014_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0015_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0016_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0017_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0018_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0019_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0020_result.jpg'
-            ],
-            rare: [
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0021_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0022_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0023_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0024_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0025_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0026_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0027_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0028_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0029_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0030_result.jpg'
-            ],
-            epic: [
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0031_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0032_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0033_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0034_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0035_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0036_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0037_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0038_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0039_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0040_result.jpg'
-            ],
-            legendary: [
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0041_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0042_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0043_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0044_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0045_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0046_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0047_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0048_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0049_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0050_result.jpg'
-            ],
-            ultra: [
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0051_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0052_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0053_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0054_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0055_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0056_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0057_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0058_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0059_result.jpg',
-                'https://github.com/meditz1/meditz1.github.io/blob/5ac80b3463a2c50a74202f830a7c648fbba0f2b4/Untitled%20presentation_page-0060_result.jpg'
-            ],
-        };
+const images = {
+  common: [
+    'https://github.com/user-attachments/assets/11dc033a-d7d7-48b5-a4bd-128bbc98465b',
+    'https://github.com/user-attachments/assets/b6f1c7cb-d227-4b1d-94d9-f5cd5b24fa6f',
+    'https://github.com/user-attachments/assets/c4167c26-b014-4e76-bc94-55f2631f246b',
+    'https://github.com/user-attachments/assets/95672517-7aba-4c60-aa36-acab940b4208',
+    'https://github.com/user-attachments/assets/bbe93a42-7673-48fb-866b-d22cc7066e96',
+    'https://github.com/user-attachments/assets/fb97fed8-016b-4c9a-9371-539f10bdbb3c',
+    'https://github.com/user-attachments/assets/eec643b9-a735-4d8d-9aab-808fd9194496',
+    'https://github.com/user-attachments/assets/c7886242-55ee-45a6-83f5-28d9d029d7aa',
+    'https://github.com/user-attachments/assets/4a1071c4-360f-44aa-ac85-d0a1fae6625e',
+    'https://github.com/user-attachments/assets/fc6a33c9-4ec4-443a-8841-bac5cc9af1f0'
+  ],
+  uncommon: [
+    'https://github.com/user-attachments/assets/9fbe770b-e6d6-49cc-beb4-2a6da602b152',
+    'https://github.com/user-attachments/assets/788947e1-a656-4870-9f68-bcaa1aca5337',
+    'https://github.com/user-attachments/assets/82c5b67a-6872-4ce8-b079-cd23e401f1b8',
+    'https://github.com/user-attachments/assets/bac078b2-e64c-4019-aae3-aaa1cc494f74',
+    'https://github.com/user-attachments/assets/4ebb2cc8-c4a6-4192-b3fb-6ce51f121d45',
+    'https://github.com/user-attachments/assets/6d4e88e6-6008-4bf8-b21e-5eb8f252c041',
+    'https://github.com/user-attachments/assets/50942121-55c3-4890-9a18-969bd7d1d7da',
+    'https://github.com/user-attachments/assets/a879ebbc-1b86-45b6-aa23-cb4ea759f2f2',
+    'https://github.com/user-attachments/assets/75675885-a9ea-4594-9d6e-4f5053d18c48',
+    'https://github.com/user-attachments/assets/a97c9016-b808-4ba3-bdc1-25f95220e1fd'
+  ],
+  rare: [
+    'https://github.com/user-attachments/assets/e432f392-3b84-4e69-ad69-e7cf9f6cc2e7',
+    'https://github.com/user-attachments/assets/2758448d-dd43-4c33-acb5-4f6e7ab5f1d4',
+    'https://github.com/user-attachments/assets/14529120-a4db-48aa-8210-821e8c295f8c',
+    'https://github.com/user-attachments/assets/17ce7007-f9c0-4903-941d-3f85a4c24524',
+    'https://github.com/user-attachments/assets/f0471a97-2f05-4641-9053-678432f0e48c',
+    'https://github.com/user-attachments/assets/29691020-837c-4de3-ac4a-7ea118ceb7a5',
+    'https://github.com/user-attachments/assets/9ee40a19-57b2-454d-8b52-99b28b232e91',
+    'https://github.com/user-attachments/assets/810f99ae-e24c-4892-be53-141c699a6340',
+    'https://github.com/user-attachments/assets/df56176a-d2e8-4eff-a016-db37c7528021',
+    'https://github.com/user-attachments/assets/92807ca9-c45f-4075-af22-739143359748'
+  ],
+  epic: [
+    'https://github.com/user-attachments/assets/62465d97-6e8d-422d-8a18-0b6237ba55b5',
+    'https://github.com/user-attachments/assets/43606517-5f59-44c2-b294-4e2640fd09d4',
+    'https://github.com/user-attachments/assets/5e37adb3-6c6f-4909-8a7f-f8bee8f00d20',
+    'https://github.com/user-attachments/assets/205e01a4-a503-4820-811e-ca645df04cc7',
+    'https://github.com/user-attachments/assets/fd99312f-e82d-4093-a365-9576908c844b',
+    'https://github.com/user-attachments/assets/a375b0ee-b8d1-41b4-85ae-0121b300a582',
+    'https://github.com/user-attachments/assets/260832e9-7020-4aa9-9bbb-790c08ef5c5a',
+    'https://github.com/user-attachments/assets/09dc868f-3a5e-4091-8c56-a17d10ed8341',
+    'https://github.com/user-attachments/assets/8537e5d5-0963-4715-9fe5-d2ea2ca2f1f4',
+    'https://github.com/user-attachments/assets/4ce7d8a7-e4e1-4687-8e90-0593c1fd65e9'
+  ],
+  legendary: [
+    'https://github.com/user-attachments/assets/16bda44b-7472-4f5b-8309-a173260c28f6',
+    'https://github.com/user-attachments/assets/faea30d2-0311-4d6b-b85b-bfb031fa9f12',
+    'https://github.com/user-attachments/assets/62a4d170-d580-4715-9a30-557355e458a8',
+    'https://github.com/user-attachments/assets/22346c4c-a649-467d-93eb-2b00cc48f4de',
+    'https://github.com/user-attachments/assets/cbc17b50-06ce-4d15-beb5-3547f7a56855',
+    'https://github.com/user-attachments/assets/088764b9-b4a0-4538-b478-b549c70ab738',
+    'https://github.com/user-attachments/assets/2a37d1dc-d2b2-45cb-b7df-5df8020e51bf',
+    'https://github.com/user-attachments/assets/65e1e09b-4717-4911-b3fc-3543ef9b652b',
+    'https://github.com/user-attachments/assets/f237ebbc-229d-46ad-9e41-79193720e509',
+    'https://github.com/user-attachments/assets/0be46629-b37f-47d3-95d5-3a23041407a7'
+  ],
+  mythical: [
+    'https://github.com/user-attachments/assets/950ce981-3ae2-4689-9640-c77ecf166e7c',
+    'https://github.com/user-attachments/assets/6d64edfa-8cc3-44a6-80ea-e7e856189d3c',
+    'https://github.com/user-attachments/assets/b49b0905-8972-44ac-a690-de7c62e82bba',
+    'https://github.com/user-attachments/assets/a60df2c9-6612-4243-91e2-e55d932a2ba0',
+    'https://github.com/user-attachments/assets/1da7e761-ac9f-4989-afe5-4b7bfac65f93',
+    'https://github.com/user-attachments/assets/58c52ca3-952e-4c53-98a9-dcf5f7e9054a',
+    'https://github.com/user-attachments/assets/079a6926-a776-44a5-b6c7-cbe0f406a776',
+    'https://github.com/user-attachments/assets/7f970eb3-43de-4780-8ba9-ae9d35d79cf8',
+    'https://github.com/user-attachments/assets/c6133dd5-2500-4713-b3fe-a2f01de63b79',
+    'https://github.com/user-attachments/assets/97d86029-88be-4883-a4c1-73fa7dfd8ba7'
+  ]
+};
+
 
         let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
         let money = parseInt(localStorage.getItem('money')) || 0;
