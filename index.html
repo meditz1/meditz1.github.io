@@ -202,14 +202,38 @@ const images = {
             });
         }
 
-        function sellItem(index) {
-            inventory.splice(index, 1);
-            money++;
-            localStorage.setItem('inventory', JSON.stringify(inventory));
-            localStorage.setItem('money', money);
-            document.getElementById('money').innerText = money;
-            updateInventory();
+function sellItem(index) {
+    const imgSrc = inventory[index]; // Get the image's source
+    let rarityValue = 0;
+
+    // Determine the rarity of the image by matching its source
+    for (const rarity in images) {
+        if (images[rarity].includes(imgSrc)) {
+            // Assign value based on rarity
+            switch (rarity) {
+                case 'common': rarityValue = 1; break;
+                case 'uncommon': rarityValue = 10; break;
+                case 'rare': rarityValue = 100; break;
+                case 'epic': rarityValue = 1000; break;
+                case 'legendary': rarityValue = 10000; break;
+                case 'mythical': rarityValue = 1000000; break;
+            }
+            break;
         }
+    }
+
+    // Add the rarityValue to the money
+    money += rarityValue;
+
+    // Remove the item from inventory
+    inventory.splice(index, 1);
+
+    // Update localStorage and UI
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    localStorage.setItem('money', money);
+    document.getElementById('money').innerText = money;
+    updateInventory();
+}
 
         window.onload = function() {
             document.getElementById('money').innerText = money;
