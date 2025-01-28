@@ -179,10 +179,10 @@
         let luck = parseInt(localStorage.getItem('luck')) || 0; // Default luck
 
         let upgradeCosts = JSON.parse(localStorage.getItem('upgradeCosts')) || {
-            imageSize: 10,
-            imageDuration: 10,
-            inventorySpace: 10,
-            luck: 10
+            imageSize: 100,
+            imageDuration: 100,
+            inventorySpace: 100,
+            luck: 100
         };
 
         function getRandomRarity() {
@@ -190,7 +190,7 @@
             let randomWeight = Math.random() * totalWeight;
 
             for (const rarity in rarities) {
-                randomWeight -= rarities[rarity] * (1 + luck * 0.1); // Increase rarity chance based on luck
+                randomWeight -= rarities[rarity] * (1 + luck * 0.1); // Luck increases rarity chances
                 if (randomWeight <= 0) {
                     return rarity;
                 }
@@ -305,7 +305,7 @@
                 alert('Not enough money!');
             }
         }
-imageDuration = 1500
+imageDuration=2000
         function upgradeImageDuration() {
             const cost = upgradeCosts.imageDuration;
             if (money >= cost) {
@@ -352,6 +352,7 @@ imageDuration = 1500
                 document.getElementById('money').innerText = money;
                 document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
                 alert(`Luck upgraded to ${luck}!`);
+                displayRarityChances(); // Update rarity chances display
             } else {
                 alert('Not enough money!');
             }
@@ -371,7 +372,7 @@ imageDuration = 1500
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
-            displayRarityChances(); // Display rarity chances
+            displayRarityChances(); // Display initial rarity chances
             setInterval(displayImage, 600);
 
             // Add event listeners for the upgrade buttons
