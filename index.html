@@ -46,13 +46,27 @@
         #upgradeButtons {
             position: fixed;
             top: 100px;
-            right: 270px;
+            right: 50px; /* Adjusted to move further right */
         }
         .upgradeButton {
             font-size: 20px;
             padding: 10px 20px;
             cursor: pointer;
             margin-bottom: 10px;
+        }
+        #rarityChances {
+            position: fixed;
+            top: 300px;
+            right: 50px; /* Adjusted to move further right */
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #rarityList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
     </style>
 </head>
@@ -65,6 +79,10 @@
         <button class="upgradeButton" id="upgradeImageDuration">Upgrade Image Duration ($200)</button>
         <button class="upgradeButton" id="upgradeInventorySpace">Upgrade Inventory Space ($300)</button>
         <button class="upgradeButton" id="upgradeLuck">Upgrade Luck ($500)</button>
+    </div>
+    <div id="rarityChances">
+        <h3>Rarity Chances</h3>
+        <ul id="rarityList"></ul>
     </div>
     <div id="inventory"></div>
 
@@ -160,7 +178,7 @@
         let inventoryLimit = parseInt(localStorage.getItem('inventoryLimit')) || 5; // Default inventory limit
         let luck = parseInt(localStorage.getItem('luck')) || 0; // Default luck
 
-        let upgradeCosts = {
+        let upgradeCosts = JSON.parse(localStorage.getItem('upgradeCosts')) || {
             imageSize: 100,
             imageDuration: 100,
             inventorySpace: 100,
@@ -279,6 +297,7 @@
                 upgradeCosts.imageSize *= 2; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('imageSize', imageSize);
+                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
                 document.getElementById('money').innerText = money;
                 document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${upgradeCosts.imageSize})`;
                 alert(`Image size upgraded to ${imageSize}px!`);
@@ -295,6 +314,7 @@
                 upgradeCosts.imageDuration *= 2; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('imageDuration', imageDuration);
+                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
                 document.getElementById('money').innerText = money;
                 document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${upgradeCosts.imageDuration})`;
                 alert(`Image duration upgraded to ${imageDuration / 1000} seconds!`);
@@ -311,6 +331,7 @@
                 upgradeCosts.inventorySpace *= 2; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('inventoryLimit', inventoryLimit);
+                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
                 document.getElementById('money').innerText = money;
                 document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${upgradeCosts.inventorySpace})`;
                 alert(`Inventory space upgraded to ${inventoryLimit} slots!`);
@@ -327,6 +348,7 @@
                 upgradeCosts.luck *= 2; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('luck', luck);
+                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
                 document.getElementById('money').innerText = money;
                 document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
                 alert(`Luck upgraded to ${luck}!`);
@@ -335,9 +357,21 @@
             }
         }
 
+        function displayRarityChances() {
+            const rarityList = document.getElementById('rarityList');
+            rarityList.innerHTML = '';
+            for (const rarity in rarities) {
+                const chance = rarities[rarity] * (1 + luck * 0.1); // Adjust chance based on luck
+                const li = document.createElement('li');
+                li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
+                rarityList.appendChild(li);
+            }
+        }
+
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
+            displayRarityChances(); // Display rarity chances
             setInterval(displayImage, 6000);
 
             // Add event listeners for the upgrade buttons
