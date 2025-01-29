@@ -190,7 +190,7 @@
             let randomWeight = Math.random() * totalWeight;
 
             for (const rarity in rarities) {
-                randomWeight -= rarities[rarity] * (1 + luck * 0.1); // Luck increases rarity chances
+                randomWeight -= rarities[rarity] / (1 + luck * 0.1); // Luck increases rarity chances
                 if (randomWeight <= 0) {
                     return rarity;
                 }
