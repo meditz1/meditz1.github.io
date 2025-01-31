@@ -204,7 +204,7 @@ function getRandomrarities() {
         }
 
 function displayImage() {
-    const baseComparisons = 10; // Base number of comparisons
+    const baseComparisons = 1; // Base number of comparisons
     const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
     let highestRarityImage = null; // Store the highest rarity image
@@ -315,7 +315,7 @@ function displayImage() {
             if (money >= cost) {
                 money -= cost;
                 imageSize += 5; // Increase size by 5px
-                upgradeCosts.imageSize *= 2; // Double the cost
+                upgradeCosts.imageSize *= 1.1; // increasing prices
                 localStorage.setItem('money', money);
                 localStorage.setItem('imageSize', imageSize);
                 localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
