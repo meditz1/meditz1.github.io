@@ -207,21 +207,29 @@ function displayImage() {
     const baseComparisons = 1000; // Base number of comparisons
     const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
-    let highestraritiesImage = null; // Store the highest rarity image
+    let highestRarityImage = null; // Store the highest rarity image
+    let highestRarityKey = 'common'; // Start with the lowest rarity
+
+    // Define the order of rarities from lowest to highest
+    const rarityOrder = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythical'];
 
     // Generate and compare multiple random images
     for (let i = 0; i < totalComparisons; i++) {
         const randomImage = getRandomImage(); // Get a random image
-        if (!highestraritiesImage || rarities[randomImage.rarities] > rarities[highestraritiesImage.rarities]) {
-            highestraritiesImage = randomImage; // Update the highest rarity image
+        const currentRarityKey = randomImage.rarities;
+
+        // Compare the current rarity with the highest rarity found so far
+        if (rarityOrder.indexOf(currentRarityKey) > rarityOrder.indexOf(highestRarityKey)) {
+            highestRarityKey = currentRarityKey;
+            highestRarityImage = randomImage;
         }
     }
 
     // Create an image element
     const imgElement = document.createElement('img');
-    imgElement.src = highestraritiesImage.image;
+    imgElement.src = highestRarityImage.image;
     imgElement.className = 'image';
-    imgElement.alt = highestraritiesImage.rarities;
+    imgElement.alt = highestRarityImage.rarities;
     imgElement.style.top = `${Math.random() * 350}px`;
     imgElement.style.left = `${Math.random() * 550}px`;
     imgElement.style.width = `${imageSize}px`;
@@ -229,7 +237,7 @@ function displayImage() {
 
     imgElement.onclick = function () {
         if (inventory.length < inventoryLimit) {
-            addToInventory(highestraritiesImage.image);
+            addToInventory(highestRarityImage.image);
             imgElement.remove();
         } else {
             alert('Inventory is full!');
