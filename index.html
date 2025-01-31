@@ -96,7 +96,7 @@
             mythical: 0.01,
         };
 
-                const images = {
+        const images = {
             common: [
                 'https://github.com/user-attachments/assets/11dc033a-d7d7-48b5-a4bd-128bbc98465b',
                 'https://github.com/user-attachments/assets/b6f1c7cb-d227-4b1d-94d9-f5cd5b24fa6f',
@@ -199,55 +199,45 @@
 
         function getRandomImage() {
             const rarity = getRandomRarity();
-            const image = images[rarity][Math.floor(Math.random() * 10)];
+            const image = images[rarity][Math.floor(Math.random() * images[rarity].length)];
             return { rarity, image };
         }
 
-function displayImage() {
-    const numberOfImagesToCompare = 10; // Number of images to compare
-    const images = []; // Array to store the images
+        function displayImage() {
+            const numberOfImagesToCompare = 10; // Number of images to compare
+            const images = []; // Array to store the images
 
-    // Generate and store multiple random images
-    for (let i = 0; i < numberOfImagesToCompare; i++) {
-        images.push(getRandomImage());
-    }
+            // Generate and store multiple random images
+            for (let i = 0; i < numberOfImagesToCompare; i++) {
+                images.push(getRandomImage());
+            }
 
-    // Find the image with the highest rarity
-    let highestRarityImage = images[0]; // Start with the first image
-    for (let i = 1; i < images.length; i++) {
-        if (images[i].rarity > highestRarityImage.rarity) {
-            highestRarityImage = images[i];
-        }
-    }
+            // Find the image with the highest rarity
+            let highestRarityImage = images[0]; // Start with the first image
+            for (let i = 1; i < images.length; i++) {
+                if (images[i].rarity > highestRarityImage.rarity) {
+                    highestRarityImage = images[i];
+                }
+            }
 
-    // Create an image element
-    const imgElement = document.createElement('img');
-    imgElement.src = highestRarityImage.image;
-    imgElement.className = 'image';
-    imgElement.alt = highestRarityImage.rarity;
-    imgElement.style.top = `${Math.random() * 350}px`;
-    imgElement.style.left = `${Math.random() * 550}px`;
-    imgElement.style.width = `${imageSize}px`;
-    imgElement.style.height = `${imageSize}px`;
+            // Create an image element
+            const imgElement = document.createElement('img');
+            imgElement.src = highestRarityImage.image;
+            imgElement.className = 'image';
+            imgElement.alt = highestRarityImage.rarity;
+            imgElement.style.top = `${Math.random() * 350}px`;
+            imgElement.style.left = `${Math.random() * 550}px`;
+            imgElement.style.width = `${imageSize}px`;
+            imgElement.style.height = `${imageSize}px`;
 
-    imgElement.onclick = function() {
-        if (inventory.length < inventoryLimit) {
-            addToInventory(highestRarityImage.image);
-            imgElement.remove();
-        } else {
-            alert('Inventory is full!');
-        }
-    };
-
-    document.getElementById('gameArea').appendChild(imgElement);
-
-    // Remove image after the specified duration
-    setTimeout(() => {
-        if (imgElement.parentElement) {
-            imgElement.remove();
-        }
-    }, imageDuration);
-}
+            imgElement.onclick = function() {
+                if (inventory.length < inventoryLimit) {
+                    addToInventory(highestRarityImage.image);
+                    imgElement.remove();
+                } else {
+                    alert('Inventory is full!');
+                }
+            };
 
             document.getElementById('gameArea').appendChild(imgElement);
 
@@ -331,7 +321,7 @@ function displayImage() {
                 alert('Not enough money!');
             }
         }
-imageDuration=2000
+
         function upgradeImageDuration() {
             const cost = upgradeCosts.imageDuration;
             if (money >= cost) {
