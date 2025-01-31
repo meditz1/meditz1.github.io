@@ -204,7 +204,7 @@ function getRandomRarity() {
         }
 
 function displayImage() {
-    const baseComparisons = 500; // Base number of comparisons
+    const baseComparisons = 2000; // Base number of comparisons
     const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
     const images = []; // Array to store the images
@@ -217,7 +217,7 @@ function displayImage() {
     // Find the image with the highest rarity
     let highestRarityImage = images[0]; // Start with the first image
     for (let i = 1; i < images.length; i++) {
-        if (images[i].rarity > highestRarityImage.rarity) {
+        if (rarity[images[i].rarity] > rarity[highestRarityImage.rarity]) {
             highestRarityImage = images[i];
         }
     }
