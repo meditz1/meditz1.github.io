@@ -185,17 +185,17 @@
             luck: 10
         };
 
-        function getRandomRarity() {
-            const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
-            let randomWeight = Math.random() * totalWeight;
+function getRandomRarity() {
+    const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
+    let randomWeight = Math.random() * totalWeight;
 
-            for (const rarity in rarities) {
-                randomWeight -= rarities[rarity] / (1 + luck * 0.1); // Luck increases rarity chances
-                if (randomWeight <= 0) {
-                    return rarity;
-                }
-            }
+    for (const rarity in rarities) {
+        randomWeight -= rarities[rarity]; // Remove luck influence
+        if (randomWeight <= 0) {
+            return rarity;
         }
+    }
+}
 
         function getRandomImage() {
             const rarity = getRandomRarity();
@@ -203,51 +203,53 @@
             return { rarity, image };
         }
 
-        function displayImage() {
-            const numberOfImagesToCompare = 10; // Number of images to compare
-            const images = []; // Array to store the images
+function displayImage() {
+    const baseComparisons = 10; // Base number of comparisons
+    const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
-            // Generate and store multiple random images
-            for (let i = 0; i < numberOfImagesToCompare; i++) {
-                images.push(getRandomImage());
-            }
+    const images = []; // Array to store the images
 
-            // Find the image with the highest rarity
-            let highestRarityImage = images[0]; // Start with the first image
-            for (let i = 1; i < images.length; i++) {
-                if (images[i].rarity > highestRarityImage.rarity) {
-                    highestRarityImage = images[i];
-                }
-            }
+    // Generate and store multiple random images
+    for (let i = 0; i < totalComparisons; i++) {
+        images.push(getRandomImage());
+    }
 
-            // Create an image element
-            const imgElement = document.createElement('img');
-            imgElement.src = highestRarityImage.image;
-            imgElement.className = 'image';
-            imgElement.alt = highestRarityImage.rarity;
-            imgElement.style.top = `${Math.random() * 350}px`;
-            imgElement.style.left = `${Math.random() * 550}px`;
-            imgElement.style.width = `${imageSize}px`;
-            imgElement.style.height = `${imageSize}px`;
-
-            imgElement.onclick = function() {
-                if (inventory.length < inventoryLimit) {
-                    addToInventory(highestRarityImage.image);
-                    imgElement.remove();
-                } else {
-                    alert('Inventory is full!');
-                }
-            };
-
-            document.getElementById('gameArea').appendChild(imgElement);
-
-            // Remove image after the specified duration
-            setTimeout(() => {
-                if (imgElement.parentElement) {
-                    imgElement.remove();
-                }
-            }, imageDuration);
+    // Find the image with the highest rarity
+    let highestRarityImage = images[0]; // Start with the first image
+    for (let i = 1; i < images.length; i++) {
+        if (images[i].rarity > highestRarityImage.rarity) {
+            highestRarityImage = images[i];
         }
+    }
+
+    // Create an image element
+    const imgElement = document.createElement('img');
+    imgElement.src = highestRarityImage.image;
+    imgElement.className = 'image';
+    imgElement.alt = highestRarityImage.rarity;
+    imgElement.style.top = `${Math.random() * 350}px`;
+    imgElement.style.left = `${Math.random() * 550}px`;
+    imgElement.style.width = `${imageSize}px`;
+    imgElement.style.height = `${imageSize}px`;
+
+    imgElement.onclick = function() {
+        if (inventory.length < inventoryLimit) {
+            addToInventory(highestRarityImage.image);
+            imgElement.remove();
+        } else {
+            alert('Inventory is full!');
+        }
+    };
+
+    document.getElementById('gameArea').appendChild(imgElement);
+
+    // Remove image after the specified duration
+    setTimeout(() => {
+        if (imgElement.parentElement) {
+            imgElement.remove();
+        }
+    }, imageDuration);
+}
 
         function addToInventory(image) {
             inventory.push(image);
@@ -356,34 +358,33 @@ imageDuration=2000
             }
         }
 
-        function upgradeLuck() {
-            const cost = upgradeCosts.luck;
-            if (money >= cost) {
-                money -= cost;
-                luck += 1; // Increase luck by 1
-                upgradeCosts.luck *= 2; // Double the cost
-                localStorage.setItem('money', money);
-                localStorage.setItem('luck', luck);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
-                document.getElementById('money').innerText = money;
-                document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
-                alert(`Luck upgraded to ${luck}!`);
-                displayRarityChances(); // Update rarity chances display
-            } else {
-                alert('Not enough money!');
-            }
-        }
+function upgradeLuck() {
+    const cost = upgradeCosts.luck;
+    if (money >= cost) {
+        money -= cost;
+        luck += 1; // Increase luck by 1 (which increases comparisons)
+        upgradeCosts.luck *= 2; // Double the cost
+        localStorage.setItem('money', money);
+        localStorage.setItem('luck', luck);
+        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
+        document.getElementById('money').innerText = money;
+        document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
+        alert(`Luck upgraded! You now compare ${10 + luck} images.`);
+    } else {
+        alert('Not enough money!');
+    }
+}
 
-        function displayRarityChances() {
-            const rarityList = document.getElementById('rarityList');
-            rarityList.innerHTML = '';
-            for (const rarity in rarities) {
-                const chance = rarities[rarity] * (1 + luck * 0.1); // Adjust chance based on luck
-                const li = document.createElement('li');
-                li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
-                rarityList.appendChild(li);
-            }
-        }
+function displayRarityChances() {
+    const rarityList = document.getElementById('rarityList');
+    rarityList.innerHTML = '';
+    for (const rarity in rarities) {
+        const chance = rarities[rarity]; // Base chance without luck
+        const li = document.createElement('li');
+        li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
+        rarityList.appendChild(li);
+    }
+}
 
         window.onload = function() {
             document.getElementById('money').innerText = money;
