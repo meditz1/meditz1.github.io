@@ -331,7 +331,7 @@ imageDuration=1500
             const cost = upgradeCosts.imageDuration;
             if (money >= cost) {
                 money -= cost;
-                imageDuration += 1000; // Increase duration by 1 second
+                imageDuration += 500; // Increase duration by 1/2 second
                 upgradeCosts.imageDuration *= 1.1; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('imageDuration', imageDuration);
