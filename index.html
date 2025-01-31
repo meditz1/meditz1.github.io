@@ -204,7 +204,7 @@ function getRandomrarities() {
         }
 
 function displayImage() {
-    const baseComparisons = 5; // Base number of comparisons
+    const baseComparisons = 1; // Base number of comparisons
     const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
     let highestRarityImage = null; // Store the highest rarity image
@@ -326,13 +326,13 @@ function displayImage() {
                 alert('Not enough money!');
             }
         }
-imageDuration=1000
+imageDuration=1500
         function upgradeImageDuration() {
             const cost = upgradeCosts.imageDuration;
             if (money >= cost) {
                 money -= cost;
-                imageDuration += 500; // Increase duration by 1/2 second
-                upgradeCosts.imageDuration *= 1.10; // Double the cost
+                imageDuration += 1000; // Increase duration by 1 second
+                upgradeCosts.imageDuration *= 1.1; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('imageDuration', imageDuration);
                 localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
@@ -349,7 +349,7 @@ imageDuration=1000
             if (money >= cost) {
                 money -= cost;
                 inventoryLimit += 1; // Increase inventory limit by 1
-                upgradeCosts.inventorySpace *= 1.10; // Double the cost
+                upgradeCosts.inventorySpace *= 1.1; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('inventoryLimit', inventoryLimit);
                 localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
@@ -366,15 +366,26 @@ function upgradeLuck() {
     if (money >= cost) {
         money -= cost;
         luck += 1; // Increase luck by 1 (which increases comparisons)
-        upgradeCosts.luck *= 1.10; // Double the cost
+        upgradeCosts.luck *= 1.1; // Double the cost
         localStorage.setItem('money', money);
         localStorage.setItem('luck', luck);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
         document.getElementById('money').innerText = money;
         document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
-        alert(`Luck upgraded! You now compare ${1 + luck} images.`);
+        alert(`Luck upgraded! You now compare ${10 + luck} images.`);
     } else {
         alert('Not enough money!');
+    }
+}
+
+function displayraritiesChances() {
+    const raritiesList = document.getElementById('raritiesList');
+    raritiesList.innerHTML = '';
+    for (const rarity in rarities) {
+        const chance = rarities[rarity]; // Base chance without luck
+        const li = document.createElement('li');
+        li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
+        raritiesList.appendChild(li);
     }
 }
 
