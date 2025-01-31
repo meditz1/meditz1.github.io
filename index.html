@@ -204,7 +204,7 @@ function getRandomRarity() {
         }
 
 function displayImage() {
-    const baseComparisons = 10; // Base number of comparisons
+    const baseComparisons = 500; // Base number of comparisons
     const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
     const images = []; // Array to store the images
@@ -390,7 +390,7 @@ function displayRarityChances() {
             document.getElementById('money').innerText = money;
             updateInventory();
             displayRarityChances(); // Display initial rarity chances
-            setInterval(displayImage, 600);
+            setInterval(displayImage, 6000);
 
             // Add event listeners for the upgrade buttons
             document.getElementById('upgradeImageSize').onclick = upgradeImageSize;
