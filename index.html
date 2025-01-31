@@ -54,7 +54,7 @@
             cursor: pointer;
             margin-bottom: 10px;
         }
-        #rarityChances {
+        #raritiesChances {
             position: fixed;
             top: 300px;
             right: 50px; /* Adjusted to move further right */
@@ -63,7 +63,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        #rarityList {
+        #raritiesList {
             list-style-type: none;
             padding: 0;
             margin: 0;
@@ -80,9 +80,9 @@
         <button class="upgradeButton" id="upgradeInventorySpace">Upgrade Inventory Space ($300)</button>
         <button class="upgradeButton" id="upgradeLuck">Upgrade Luck ($500)</button>
     </div>
-    <div id="rarityChances">
-        <h3>Rarity Chances</h3>
-        <ul id="rarityList"></ul>
+    <div id="raritiesChances">
+        <h3>rarities Chances</h3>
+        <ul id="raritiesList"></ul>
     </div>
     <div id="inventory"></div>
 
@@ -185,22 +185,22 @@
             luck: 10
         };
 
-function getRandomRarity() {
+function getRandomrarities() {
     const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
     let randomWeight = Math.random() * totalWeight;
 
-    for (const rarity in rarities) {
-        randomWeight -= rarities[rarity]; // Remove luck influence
+    for (const rarities in rarities) {
+        randomWeight -= rarities[rarities]; // Remove luck influence
         if (randomWeight <= 0) {
-            return rarity;
+            return rarities;
         }
     }
 }
 
         function getRandomImage() {
-            const rarity = getRandomRarity();
-            const image = images[rarity][Math.floor(Math.random() * images[rarity].length)];
-            return { rarity, image };
+            const rarities = getRandomrarities();
+            const image = images[rarities][Math.floor(Math.random() * images[rarities].length)];
+            return { rarities, image };
         }
 
 function displayImage() {
@@ -214,19 +214,19 @@ function displayImage() {
         images.push(getRandomImage());
     }
 
-    // Find the image with the highest rarity
-    let highestRarityImage = images[0]; // Start with the first image
+    // Find the image with the highest rarities
+    let highestraritiesImage = images[0]; // Start with the first image
     for (let i = 1; i < images.length; i++) {
-        if (rarity[images[i].rarity] > rarity[highestRarityImage.rarity]) {
-            highestRarityImage = images[i];
+        if (rarities[images[i].rarities] > rarities[highestraritiesImage.rarities]) {
+            highestraritiesImage = images[i];
         }
     }
 
     // Create an image element
     const imgElement = document.createElement('img');
-    imgElement.src = highestRarityImage.image;
+    imgElement.src = highestraritiesImage.image;
     imgElement.className = 'image';
-    imgElement.alt = highestRarityImage.rarity;
+    imgElement.alt = highestraritiesImage.rarities;
     imgElement.style.top = `${Math.random() * 350}px`;
     imgElement.style.left = `${Math.random() * 550}px`;
     imgElement.style.width = `${imageSize}px`;
@@ -234,7 +234,7 @@ function displayImage() {
 
     imgElement.onclick = function() {
         if (inventory.length < inventoryLimit) {
-            addToInventory(highestRarityImage.image);
+            addToInventory(highestraritiesImage.image);
             imgElement.remove();
         } else {
             alert('Inventory is full!');
@@ -282,23 +282,23 @@ function displayImage() {
 
         function sellItem(index) {
             const imgSrc = inventory[index];
-            let rarityValue = 0;
+            let raritiesValue = 0;
 
-            for (const rarity in images) {
-                if (images[rarity].includes(imgSrc)) {
-                    switch (rarity) {
-                        case 'common': rarityValue = 1; break;
-                        case 'uncommon': rarityValue = 5; break;
-                        case 'rare': rarityValue = 25; break;
-                        case 'epic': rarityValue = 100; break;
-                        case 'legendary': rarityValue = 500; break;
-                        case 'mythical': rarityValue = 7777; break;
+            for (const rarities in images) {
+                if (images[rarities].includes(imgSrc)) {
+                    switch (rarities) {
+                        case 'common': raritiesValue = 1; break;
+                        case 'uncommon': raritiesValue = 5; break;
+                        case 'rare': raritiesValue = 25; break;
+                        case 'epic': raritiesValue = 100; break;
+                        case 'legendary': raritiesValue = 500; break;
+                        case 'mythical': raritiesValue = 7777; break;
                     }
                     break;
                 }
             }
 
-            money += rarityValue;
+            money += raritiesValue;
             inventory.splice(index, 1);
 
             localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -375,21 +375,21 @@ function upgradeLuck() {
     }
 }
 
-function displayRarityChances() {
-    const rarityList = document.getElementById('rarityList');
-    rarityList.innerHTML = '';
-    for (const rarity in rarities) {
-        const chance = rarities[rarity]; // Base chance without luck
+function displayraritiesChances() {
+    const raritiesList = document.getElementById('raritiesList');
+    raritiesList.innerHTML = '';
+    for (const rarities in rarities) {
+        const chance = rarities[rarities]; // Base chance without luck
         const li = document.createElement('li');
-        li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
-        rarityList.appendChild(li);
+        li.innerText = `${rarities}: ${chance.toFixed(2)}%`;
+        raritiesList.appendChild(li);
     }
 }
 
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
-            displayRarityChances(); // Display initial rarity chances
+            displayraritiesChances(); // Display initial rarities chances
             setInterval(displayImage, 50);
 
             // Add event listeners for the upgrade buttons
