@@ -189,10 +189,10 @@ function getRandomrarities() {
     const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
     let randomWeight = Math.random() * totalWeight;
 
-    for (const rarities in rarities) {
-        randomWeight -= rarities[rarities]; // Remove luck influence
+    for (const rarity in rarities) {
+        randomWeight -= rarities[rarity]; // Subtract the weight of the current rarity
         if (randomWeight <= 0) {
-            return rarities;
+            return rarity; // Return the selected rarity
         }
     }
 }
@@ -204,21 +204,16 @@ function getRandomrarities() {
         }
 
 function displayImage() {
-    const baseComparisons = 2000; // Base number of comparisons
+    const baseComparisons = 1000; // Base number of comparisons
     const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
-    const images = []; // Array to store the images
+    let highestraritiesImage = null; // Store the highest rarity image
 
-    // Generate and store multiple random images
+    // Generate and compare multiple random images
     for (let i = 0; i < totalComparisons; i++) {
-        images.push(getRandomImage());
-    }
-
-    // Find the image with the highest rarities
-    let highestraritiesImage = images[0]; // Start with the first image
-    for (let i = 1; i < images.length; i++) {
-        if (rarities[images[i].rarities] > rarities[highestraritiesImage.rarities]) {
-            highestraritiesImage = images[i];
+        const randomImage = getRandomImage(); // Get a random image
+        if (!highestraritiesImage || rarities[randomImage.rarities] > rarities[highestraritiesImage.rarities]) {
+            highestraritiesImage = randomImage; // Update the highest rarity image
         }
     }
 
@@ -232,7 +227,7 @@ function displayImage() {
     imgElement.style.width = `${imageSize}px`;
     imgElement.style.height = `${imageSize}px`;
 
-    imgElement.onclick = function() {
+    imgElement.onclick = function () {
         if (inventory.length < inventoryLimit) {
             addToInventory(highestraritiesImage.image);
             imgElement.remove();
@@ -378,10 +373,10 @@ function upgradeLuck() {
 function displayraritiesChances() {
     const raritiesList = document.getElementById('raritiesList');
     raritiesList.innerHTML = '';
-    for (const rarities in rarities) {
-        const chance = rarities[rarities]; // Base chance without luck
+    for (const rarity in rarities) {
+        const chance = rarities[rarity]; // Base chance without luck
         const li = document.createElement('li');
-        li.innerText = `${rarities}: ${chance.toFixed(2)}%`;
+        li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
         raritiesList.appendChild(li);
     }
 }
