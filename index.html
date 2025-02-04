@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skibidy Clicker</title>
     <style>
-                #gameArea {
+        #gameArea {
             position: relative;
             width: 800px;
             height: 500px;
@@ -54,10 +54,10 @@
             cursor: pointer;
             margin-bottom: 10px;
         }
-        #raritiesChances {
+        #upgradeLevels {
             position: fixed;
             top: 300px;
-            right: 50px; /* Adjusted to move further right */
+            right: 50px;
             background-color: white;
             padding: 10px;
             border: 1px solid #ccc;
@@ -69,23 +69,9 @@
             margin: 0;
         }
     </style>
-        #upgradeLevels {
-            position: fixed;
-            top: 300px;
-            right: 50px;
-            background-color: white;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #upgradeLevelsList {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-    </style>
 </head>
 <body>
+
     <div id="gameArea"></div>
     <div id="money">0</div>
     <div id="upgradeButtons">
@@ -94,7 +80,6 @@
         <button class="upgradeButton" id="upgradeInventorySpace">Upgrade Inventory Space ($300)</button>
         <button class="upgradeButton" id="upgradeLuck">Upgrade Luck ($500)</button>
     </div>
-    <!-- REPLACE raritiesChances div with this -->
     <div id="upgradeLevels">
         <h3>Upgrade Levels</h3>
         <ul id="upgradeLevelsList"></ul>
@@ -102,7 +87,7 @@
     <div id="inventory"></div>
 
     <script>
-          const rarities = {
+        const rarities = {
             common: 73.89,
             uncommon: 20,
             rare: 5,
@@ -200,20 +185,17 @@
             luck: 10
         };
 
-        // FIXED FUNCTION NAME AND VARIABLES
         function getRandomRarity() {
             const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
             let randomWeight = Math.random() * totalWeight;
 
             for (const rarity in rarities) {
                 randomWeight -= rarities[rarity];
-                if (randomWeight <= 0) {
-                    return rarity;
-                }
-            }
+                if (randomWeight <= 0) return rarity;
         }
+    }
+}
 
-        // FIXED FUNCTION AND VARIABLE NAMES
         function getRandomImage() {
             const rarity = getRandomRarity();
             const image = images[rarity][Math.floor(Math.random() * images[rarity].length)];
@@ -237,45 +219,101 @@
                 }
             }
 
-            const imgElement = document.createElement('img');
-            imgElement.src = highestRarityImage.image;
-            imgElement.className = 'image';
-            imgElement.alt = highestRarityImage.rarity;
-            imgElement.style.top = `${Math.random() * 350}px`;
-            imgElement.style.left = `${Math.random() * 550}px`;
-            imgElement.style.width = `${imageSize}px`;
-            imgElement.style.height = `${imageSize}px`;
+    // Create an image element
+    const imgElement = document.createElement('img');
+    imgElement.src = highestRarityImage.image;
+    imgElement.className = 'image';
+    imgElement.alt = highestRarityImage.rarities;
+    imgElement.style.top = `${Math.random() * 350}px`;
+    imgElement.style.left = `${Math.random() * 550}px`;
+    imgElement.style.width = `${imageSize}px`;
+    imgElement.style.height = `${imageSize}px`;
 
-            imgElement.onclick = function () {
-                if (inventory.length < inventoryLimit) {
-                    addToInventory(highestRarityImage.image);
-                    imgElement.remove();
-                } else {
-                    alert('Inventory is full!');
-                }
-            };
-
-            document.getElementById('gameArea').appendChild(imgElement);
-
-            setTimeout(() => {
-                if (imgElement.parentElement) {
-                    imgElement.remove();
-                }
-            }, imageDuration);
+    imgElement.onclick = function () {
+        if (inventory.length < inventoryLimit) {
+            addToInventory(highestRarityImage.image);
+            imgElement.remove();
+        } else {
+            alert('Inventory is full!');
         }
+    };
 
-        // NEW FUNCTION TO SHOW UPGRADE LEVELS
+    document.getElementById('gameArea').appendChild(imgElement);
+
+    // Remove image after the specified duration
+    setTimeout(() => {
+        if (imgElement.parentElement) {
+            imgElement.remove();
+        }
+    }, imageDuration);
+}
+
         function displayUpgradeLevels() {
-            const upgradeLevelsList = document.getElementById('upgradeLevelsList');
-            upgradeLevelsList.innerHTML = `
+            const list = document.getElementById('upgradeLevelsList');
+            list.innerHTML = `
                 <li>Image Size: ${imageSize}px</li>
-                <li>Image Duration: ${imageDuration/1000}s</li>
-                <li>Inventory Space: ${inventoryLimit}</li>
-                <li>Luck Level: ${luck}</li>
+                <li>Duration: ${imageDuration/1000}s</li>
+                <li>Inventory: ${inventoryLimit}</li>
+                <li>Luck: ${luck}</li>
             `;
         }
+        
+        function addToInventory(image) {
+            inventory.push(image);
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+            updateInventory();
+        }
 
-        // UPDATE UPGRADE FUNCTIONS TO SHOW LEVELS
+        function updateInventory() {
+            const inventoryArea = document.getElementById('inventory');
+            inventoryArea.innerHTML = '';
+            inventory.forEach((image, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item';
+
+                const imgElement = document.createElement('img');
+                imgElement.src = image;
+
+                const sellButton = document.createElement('button');
+                sellButton.className = 'sell-button';
+                sellButton.innerText = 'Sell';
+                sellButton.onclick = function() {
+                    sellItem(index);
+                };
+
+                itemDiv.appendChild(imgElement);
+                itemDiv.appendChild(sellButton);
+                inventoryArea.appendChild(itemDiv);
+            });
+        }
+
+        function sellItem(index) {
+            const imgSrc = inventory[index];
+            let raritiesValue = 0;
+
+            for (const rarities in images) {
+                if (images[rarities].includes(imgSrc)) {
+                    switch (rarities) {
+                        case 'common': raritiesValue = 1; break;
+                        case 'uncommon': raritiesValue = 5; break;
+                        case 'rare': raritiesValue = 25; break;
+                        case 'epic': raritiesValue = 100; break;
+                        case 'legendary': raritiesValue = 500; break;
+                        case 'mythical': raritiesValue = 7777; break;
+                    }
+                    break;
+                }
+            }
+
+            money += raritiesValue;
+            inventory.splice(index, 1);
+
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+            localStorage.setItem('money', money);
+            document.getElementById('money').innerText = money;
+            updateInventory();
+        }
+
         function upgradeImageSize() {
             const cost = upgradeCosts.imageSize;
             if (money >= cost) {
@@ -286,23 +324,25 @@
                 localStorage.setItem('imageSize', imageSize);
                 localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
                 document.getElementById('money').innerText = money;
-                document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${Math.round(upgradeCosts.imageSize)})`;
+                document.getElementById('upgradeImageSize').innerText = 
+                    `Upgrade Image Size ($${Math.round(upgradeCosts.imageSize)})`;
                 displayUpgradeLevels();
-            }
+            } else alert('Not enough money!');
         }
-
         function upgradeImageDuration() {
             const cost = upgradeCosts.imageDuration;
             if (money >= cost) {
                 money -= cost;
-                imageDuration += 500;
-                upgradeCosts.imageDuration *= 1.1;
+                imageDuration += 500; // Increase duration by 1/2 second
+                upgradeCosts.imageDuration *= 1.1; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('imageDuration', imageDuration);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
                 document.getElementById('money').innerText = money;
-                document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${Math.round(upgradeCosts.imageDuration)})`;
-                displayUpgradeLevels();
+                document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${upgradeCosts.imageDuration})`;
+                alert(`Image duration upgraded to ${imageDuration / 1000} seconds!`);
+            } else {
+                alert('Not enough money!');
             }
         }
 
@@ -310,48 +350,66 @@
             const cost = upgradeCosts.inventorySpace;
             if (money >= cost) {
                 money -= cost;
-                inventoryLimit += 1;
-                upgradeCosts.inventorySpace *= 1.1;
+                inventoryLimit += 1; // Increase inventory limit by 1
+                upgradeCosts.inventorySpace *= 1.1; // Double the cost
                 localStorage.setItem('money', money);
                 localStorage.setItem('inventoryLimit', inventoryLimit);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
                 document.getElementById('money').innerText = money;
-                document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${Math.round(upgradeCosts.inventorySpace)})`;
-                displayUpgradeLevels();
+                document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${upgradeCosts.inventorySpace})`;
+                alert(`Inventory space upgraded to ${inventoryLimit} slots!`);
+            } else {
+                alert('Not enough money!');
             }
         }
 
-        function upgradeLuck() {
-            const cost = upgradeCosts.luck;
-            if (money >= cost) {
-                money -= cost;
-                luck += 1;
-                upgradeCosts.luck *= 1.1;
-                localStorage.setItem('money', money);
-                localStorage.setItem('luck', luck);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
-                document.getElementById('money').innerText = money;
-                document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${Math.round(upgradeCosts.luck)})`;
-                displayUpgradeLevels();
-            }
-        }
+function upgradeLuck() {
+    const cost = upgradeCosts.luck;
+    if (money >= cost) {
+        money -= cost;
+        luck += 1; // Increase luck by 1 (which increases comparisons)
+        upgradeCosts.luck *= 1.1; // Double the cost
+        localStorage.setItem('money', money);
+        localStorage.setItem('luck', luck);
+        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
+        document.getElementById('money').innerText = money;
+        document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
+        alert(`Luck upgraded! You now compare ${10 + luck} images.`);
+    } else {
+        alert('Not enough money!');
+    }
+}
+
+function displayraritiesChances() {
+    const raritiesList = document.getElementById('raritiesList');
+    raritiesList.innerHTML = '';
+    for (const rarity in rarities) {
+        const chance = rarities[rarity]; // Base chance without luck
+        const li = document.createElement('li');
+        li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
+        raritiesList.appendChild(li);
+    }
+}
 
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
-            displayUpgradeLevels(); // Show upgrades instead of rarities
+            displayUpgradeLevels(); // Changed from displayraritiesChances
             setInterval(displayImage, 50);
 
-            document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${Math.round(upgradeCosts.imageSize)})`;
-            document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${Math.round(upgradeCosts.imageDuration)})`;
-            document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${Math.round(upgradeCosts.inventorySpace)})`;
-            document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${Math.round(upgradeCosts.luck)})`;
 
-            document.getElementById('upgradeImageSize').onclick = upgradeImageSize;
-            document.getElementById('upgradeImageDuration').onclick = upgradeImageDuration;
-            document.getElementById('upgradeInventorySpace').onclick = upgradeInventorySpace;
-            document.getElementById('upgradeLuck').onclick = upgradeLuck;
+            // Add event listeners for the upgrade buttons
+            const fmt = (n) => Math.round(n);
+            document.getElementById('upgradeImageSize').innerText = 
+                `Upgrade Image Size ($${fmt(upgradeCosts.imageSize)})`;
+            document.getElementById('upgradeImageDuration').innerText = 
+                `Upgrade Duration ($${fmt(upgradeCosts.imageDuration)})`;
+            document.getElementById('upgradeInventorySpace').innerText = 
+                `Upgrade Inventory ($${fmt(upgradeCosts.inventorySpace)})`;
+            document.getElementById('upgradeLuck').innerText = 
+                `Upgrade Luck ($${fmt(upgradeCosts.luck)})`;
         };
-    </script>
+
+
 </body>
 </html>
