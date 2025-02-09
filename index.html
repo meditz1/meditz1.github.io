@@ -54,7 +54,20 @@
             cursor: pointer;
             margin-bottom: 10px;
         }
-        
+        #raritiesChances {
+            position: fixed;
+            top: 300px;
+            right: 50px; /* Adjusted to move further right */
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #raritiesList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -221,7 +234,6 @@ function displayImage() {
         }
     }, imageDuration);
 }
-
         function addToInventory(image) {
             inventory.push(image);
             localStorage.setItem('inventory', JSON.stringify(inventory));
