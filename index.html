@@ -54,10 +54,10 @@
             cursor: pointer;
             margin-bottom: 10px;
         }
-        #upgradeLevels {
+        #raritiesChances {
             position: fixed;
             top: 300px;
-            right: 50px;
+            right: 50px; /* Adjusted to move further right */
             background-color: white;
             padding: 10px;
             border: 1px solid #ccc;
@@ -80,9 +80,9 @@
         <button class="upgradeButton" id="upgradeInventorySpace">Upgrade Inventory Space ($300)</button>
         <button class="upgradeButton" id="upgradeLuck">Upgrade Luck ($500)</button>
     </div>
-    <div id="upgradeLevels">
-        <h3>Upgrade Levels</h3>
-        <ul id="upgradeLevelsList"></ul>
+    <div id="raritiesChances">
+        <h3>rarities Chances</h3>
+        <ul id="raritiesList"></ul>
     </div>
     <div id="inventory"></div>
 
@@ -185,47 +185,51 @@
             luck: 10
         };
 
-function getRandomRarity() {
+function getRandomrarities() {
     const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
     let randomWeight = Math.random() * totalWeight;
 
     for (const rarity in rarities) {
-        const adjustedWeight = rarities[rarity] * (1 + luck * 0.1); // Adjust weight based on luck
-        randomWeight -= adjustedWeight;
+        randomWeight -= rarities[rarity]; // Subtract the weight of the current rarity
         if (randomWeight <= 0) {
-            return rarity;
+            return rarity; // Return the selected rarity
         }
     }
 }
 
         function getRandomImage() {
-            const rarity = getRandomRarity();
-            const image = images[rarity][Math.floor(Math.random() * images[rarity].length)];
-            return { rarity, image };
+            const rarities = getRandomrarities();
+            const image = images[rarities][Math.floor(Math.random() * images[rarities].length)];
+            return { rarities, image };
         }
 
-        function displayImage() {
-            const baseComparisons = 1;
-            const totalComparisons = baseComparisons + luck;
-            let highestRarityImage = null;
-            let highestRarityKey = 'common';
-            const rarityOrder = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythical'];
+function displayImage() {
+    const baseComparisons = 1; // Base number of comparisons
+    const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
 
-            for (let i = 0; i < totalComparisons; i++) {
-                const randomImage = getRandomImage();
-                const currentRarityKey = randomImage.rarity;
+    let highestRarityImage = null; // Store the highest rarity image
+    let highestRarityKey = 'common'; // Start with the lowest rarity
 
-                if (rarityOrder.indexOf(currentRarityKey) > rarityOrder.indexOf(highestRarityKey)) {
-                    highestRarityKey = currentRarityKey;
-                    highestRarityImage = randomImage;
-                }
-            }
+    // Define the order of rarities from lowest to highest
+    const rarityOrder = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythical'];
+
+    // Generate and compare multiple random images
+    for (let i = 0; i < totalComparisons; i++) {
+        const randomImage = getRandomImage(); // Get a random image
+        const currentRarityKey = randomImage.rarities;
+
+        // Compare the current rarity with the highest rarity found so far
+        if (rarityOrder.indexOf(currentRarityKey) > rarityOrder.indexOf(highestRarityKey)) {
+            highestRarityKey = currentRarityKey;
+            highestRarityImage = randomImage;
+        }
+    }
 
     // Create an image element
     const imgElement = document.createElement('img');
     imgElement.src = highestRarityImage.image;
     imgElement.className = 'image';
-    imgElement.alt = highestRarityImage.rarity;
+    imgElement.alt = highestRarityImage.rarities;
     imgElement.style.top = `${Math.random() * 350}px`;
     imgElement.style.left = `${Math.random() * 550}px`;
     imgElement.style.width = `${imageSize}px`;
@@ -250,16 +254,6 @@ function getRandomRarity() {
     }, imageDuration);
 }
 
-        function displayUpgradeLevels() {
-            const list = document.getElementById('upgradeLevelsList');
-            list.innerHTML = `
-                <li>Image Size: ${imageSize}px</li>
-                <li>Duration: ${imageDuration/1000}s</li>
-                <li>Inventory: ${inventoryLimit}</li>
-                <li>Luck: ${luck}</li>
-            `;
-        }
-        
         function addToInventory(image) {
             inventory.push(image);
             localStorage.setItem('inventory', JSON.stringify(inventory));
@@ -320,17 +314,19 @@ function getRandomRarity() {
             const cost = upgradeCosts.imageSize;
             if (money >= cost) {
                 money -= cost;
-                imageSize += 5;
-                upgradeCosts.imageSize *= 1.1;
+                imageSize += 5; // Increase size by 5px
+                upgradeCosts.imageSize *= 1.1; // increasing prices
                 localStorage.setItem('money', money);
                 localStorage.setItem('imageSize', imageSize);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
                 document.getElementById('money').innerText = money;
-                document.getElementById('upgradeImageSize').innerText = 
-                    `Upgrade Image Size ($${Math.round(upgradeCosts.imageSize)})`;
-                displayUpgradeLevels();
-            } else alert('Not enough money!');
+                document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${upgradeCosts.imageSize})`;
+                alert(`Image size upgraded to ${imageSize}px!`);
+            } else {
+                alert('Not enough money!');
+            }
         }
+imageDuration=1500
         function upgradeImageDuration() {
             const cost = upgradeCosts.imageDuration;
             if (money >= cost) {
@@ -396,22 +392,22 @@ function displayraritiesChances() {
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
-            displayUpgradeLevels(); // Changed from displayraritiesChances
+            displayraritiesChances(); // Display initial rarities chances
             setInterval(displayImage, 50);
 
-
             // Add event listeners for the upgrade buttons
-            const fmt = (n) => Math.round(n);
-            document.getElementById('upgradeImageSize').innerText = 
-                `Upgrade Image Size ($${fmt(upgradeCosts.imageSize)})`;
-            document.getElementById('upgradeImageDuration').innerText = 
-                `Upgrade Duration ($${fmt(upgradeCosts.imageDuration)})`;
-            document.getElementById('upgradeInventorySpace').innerText = 
-                `Upgrade Inventory ($${fmt(upgradeCosts.inventorySpace)})`;
-            document.getElementById('upgradeLuck').innerText = 
-                `Upgrade Luck ($${fmt(upgradeCosts.luck)})`;
-        };
+            document.getElementById('upgradeImageSize').onclick = upgradeImageSize;
+            document.getElementById('upgradeImageDuration').onclick = upgradeImageDuration;
+            document.getElementById('upgradeInventorySpace').onclick = upgradeInventorySpace;
+            document.getElementById('upgradeLuck').onclick = upgradeLuck;
 
+            // Update button texts with current costs
+            document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${upgradeCosts.imageSize})`;
+            document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${upgradeCosts.imageDuration})`;
+            document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${upgradeCosts.inventorySpace})`;
+            document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
+        };
+    </script>
 
 </body>
 </html>
