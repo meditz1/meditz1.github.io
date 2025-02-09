@@ -185,13 +185,15 @@
             luck: 10
         };
 
-        function getRandomRarity() {
-            const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
-            let randomWeight = Math.random() * totalWeight;
+function getRandomRarity() {
+    const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
+    let randomWeight = Math.random() * totalWeight;
 
-            for (const rarity in rarities) {
-                randomWeight -= rarities[rarity];
-                if (randomWeight <= 0) return rarity;
+    for (const rarity in rarities) {
+        const adjustedWeight = rarities[rarity] * (1 + luck * 0.1); // Adjust weight based on luck
+        randomWeight -= adjustedWeight;
+        if (randomWeight <= 0) {
+            return rarity;
         }
     }
 }
