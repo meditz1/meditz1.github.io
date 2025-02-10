@@ -346,8 +346,7 @@ function upgradeLuck() {
 }
 
 function displayraritiesChances() {
-    const raritiesList = document.getElementById('raritiesList');
-    raritiesList.innerHTML = '';
+    const raritiesList = document.getElementById('');
     for (const rarity in rarities) {
         const chance = Math.round(rarities[rarity]); // Round the chance to the nearest whole number
         const li = document.createElement('li');
