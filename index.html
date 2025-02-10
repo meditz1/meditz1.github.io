@@ -351,7 +351,6 @@ function displayraritiesChances() {
     for (const rarity in rarities) {
         const chance = Math.round(rarities[rarity]); // Round the chance to the nearest whole number
         const li = document.createElement('li');
-        li.innerText = `${rarity}: ${chance}%`; // Display the rounded chance
         raritiesList.appendChild(li);
     }
 }
