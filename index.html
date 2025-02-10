@@ -290,67 +290,67 @@ function displayImage() {
             updateInventory();
         }
 
-        function upgradeImageSize() {
-            const cost = upgradeCosts.imageSize;
-            if (money >= cost) {
-                money -= cost;
-                imageSize += 5; // Increase size by 5px
-                upgradeCosts.imageSize *= 1.1; // increasing prices
-                localStorage.setItem('money', money);
-                localStorage.setItem('imageSize', imageSize);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
-                document.getElementById('money').innerText = money;
-                document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${upgradeCosts.imageSize})`;
-                alert(`Image size upgraded to ${imageSize}px!`);
-            } else {
-                alert('Not enough money!');
-            }
-        }
-imageDuration=1500
-        function upgradeImageDuration() {
-            const cost = upgradeCosts.imageDuration;
-            if (money >= cost) {
-                money -= cost;
-                imageDuration += 500; // Increase duration by 1/2 second
-                upgradeCosts.imageDuration *= 1.1; // Double the cost
-                localStorage.setItem('money', money);
-                localStorage.setItem('imageDuration', imageDuration);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
-                document.getElementById('money').innerText = money;
-                document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${upgradeCosts.imageDuration})`;
-                alert(`Image duration upgraded to ${imageDuration / 1000} seconds!`);
-            } else {
-                alert('Not enough money!');
-            }
-        }
-
-        function upgradeInventorySpace() {
-            const cost = upgradeCosts.inventorySpace;
-            if (money >= cost) {
-                money -= cost;
-                inventoryLimit += 1; // Increase inventory limit by 1
-                upgradeCosts.inventorySpace *= 1.1; // Double the cost
-                localStorage.setItem('money', money);
-                localStorage.setItem('inventoryLimit', inventoryLimit);
-                localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
-                document.getElementById('money').innerText = money;
-                document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${upgradeCosts.inventorySpace})`;
-                alert(`Inventory space upgraded to ${inventoryLimit} slots!`);
-            } else {
-                alert('Not enough money!');
-            }
-        }
-
-function upgradeLuck() {
-    const cost = upgradeCosts.luck;
+function upgradeImageSize() {
+    const cost = Math.round(upgradeCosts.imageSize); // Round the cost
     if (money >= cost) {
         money -= cost;
-        luck += 1; // Increase luck by 1 (which increases comparisons)
-        upgradeCosts.luck *= 1.1; // Double the cost
+        imageSize += 5;
+        upgradeCosts.imageSize = Math.round(upgradeCosts.imageSize * 1.1); // Round the new cost
+        localStorage.setItem('money', money);
+        localStorage.setItem('imageSize', imageSize);
+        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+        document.getElementById('money').innerText = Math.round(money); // Round the money display
+        document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${upgradeCosts.imageSize})`;
+        alert(`Image size upgraded to ${imageSize}px!`);
+    } else {
+        alert('Not enough money!');
+    }
+}
+
+function upgradeImageDuration() {
+    const cost = Math.round(upgradeCosts.imageDuration); // Round the cost
+    if (money >= cost) {
+        money -= cost;
+        imageDuration += 500;
+        upgradeCosts.imageDuration = Math.round(upgradeCosts.imageDuration * 1.1); // Round the new cost
+        localStorage.setItem('money', money);
+        localStorage.setItem('imageDuration', imageDuration);
+        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+        document.getElementById('money').innerText = Math.round(money); // Round the money display
+        document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${upgradeCosts.imageDuration})`;
+        alert(`Image duration upgraded to ${imageDuration / 1000} seconds!`);
+    } else {
+        alert('Not enough money!');
+    }
+}
+
+function upgradeInventorySpace() {
+    const cost = Math.round(upgradeCosts.inventorySpace); // Round the cost
+    if (money >= cost) {
+        money -= cost;
+        inventoryLimit += 1;
+        upgradeCosts.inventorySpace = Math.round(upgradeCosts.inventorySpace * 1.1); // Round the new cost
+        localStorage.setItem('money', money);
+        localStorage.setItem('inventoryLimit', inventoryLimit);
+        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+        document.getElementById('money').innerText = Math.round(money); // Round the money display
+        document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${upgradeCosts.inventorySpace})`;
+        alert(`Inventory space upgraded to ${inventoryLimit} slots!`);
+    } else {
+        alert('Not enough money!');
+    }
+}
+
+function upgradeLuck() {
+    const cost = Math.round(upgradeCosts.luck); // Round the cost
+    if (money >= cost) {
+        money -= cost;
+        luck += 1;
+        upgradeCosts.luck = Math.round(upgradeCosts.luck * 1.1); // Round the new cost
         localStorage.setItem('money', money);
         localStorage.setItem('luck', luck);
-        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts)); // Save upgrade costs
-        document.getElementById('money').innerText = money;
+        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+        document.getElementById('money').innerText = Math.round(money); // Round the money display
         document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
         alert(`Luck upgraded! You now compare ${10 + luck} images.`);
     } else {
@@ -359,32 +359,34 @@ function upgradeLuck() {
 }
 
 function displayraritiesChances() {
+    const raritiesList = document.getElementById('raritiesList');
+    raritiesList.innerHTML = '';
     for (const rarity in rarities) {
-        const chance = rarities[rarity]; // Base chance without luck
+        const chance = Math.round(rarities[rarity]); // Round the chance to the nearest whole number
         const li = document.createElement('li');
-        li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
+        li.innerText = `${rarity}: ${chance}%`; // Display the rounded chance
         raritiesList.appendChild(li);
     }
 }
 
-        window.onload = function() {
-            document.getElementById('money').innerText = money;
-            updateInventory();
-            displayraritiesChances(); // Display initial rarities chances
-            setInterval(displayImage, 50);
+window.onload = function() {
+    document.getElementById('money').innerText = Math.round(money); // Round the money display
+    updateInventory();
+    displayraritiesChances(); // Display initial rarities chances
+    setInterval(displayImage, 50);
 
-            // Add event listeners for the upgrade buttons
-            document.getElementById('upgradeImageSize').onclick = upgradeImageSize;
-            document.getElementById('upgradeImageDuration').onclick = upgradeImageDuration;
-            document.getElementById('upgradeInventorySpace').onclick = upgradeInventorySpace;
-            document.getElementById('upgradeLuck').onclick = upgradeLuck;
+    // Add event listeners for the upgrade buttons
+    document.getElementById('upgradeImageSize').onclick = upgradeImageSize;
+    document.getElementById('upgradeImageDuration').onclick = upgradeImageDuration;
+    document.getElementById('upgradeInventorySpace').onclick = upgradeInventorySpace;
+    document.getElementById('upgradeLuck').onclick = upgradeLuck;
 
-            // Update button texts with current costs
-            document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${upgradeCosts.imageSize})`;
-            document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${upgradeCosts.imageDuration})`;
-            document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${upgradeCosts.inventorySpace})`;
-            document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
-        };
+    // Update button texts with current costs
+    document.getElementById('upgradeImageSize').innerText = `Upgrade Image Size ($${Math.round(upgradeCosts.imageSize)})`;
+    document.getElementById('upgradeImageDuration').innerText = `Upgrade Image Duration ($${Math.round(upgradeCosts.imageDuration)})`;
+    document.getElementById('upgradeInventorySpace').innerText = `Upgrade Inventory Space ($${Math.round(upgradeCosts.inventorySpace)})`;
+    document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${Math.round(upgradeCosts.luck)})`;
+};
     </script>
 
 </body>
