@@ -358,6 +358,15 @@ function upgradeLuck() {
     }
 }
 
+function displayraritiesChances() {
+    for (const rarity in rarities) {
+        const chance = rarities[rarity]; // Base chance without luck
+        const li = document.createElement('li');
+        li.innerText = `${rarity}: ${chance.toFixed(2)}%`;
+        raritiesList.appendChild(li);
+    }
+}
+
         window.onload = function() {
             document.getElementById('money').innerText = money;
             updateInventory();
