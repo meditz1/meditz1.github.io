@@ -53,7 +53,20 @@
             padding: 10px 20px;
             cursor: pointer;
             margin-bottom: 10px;
-            
+        }
+        #raritiesChances {
+            position: fixed;
+            top: 300px;
+            right: 50px; /* Adjusted to move further right */
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #raritiesList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
     </style>
 </head>
@@ -339,17 +352,19 @@ function upgradeLuck() {
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
         document.getElementById('money').innerText = Math.round(money); // Round the money display
         document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
-        alert(`Luck upgraded! You now compare ${10 + luck} images.`);
+        alert(`Luck upgraded! + ${0 + luck}.`);
     } else {
         alert('Not enough money!');
     }
 }
 
 function displayraritiesChances() {
-    const raritiesList = document.getElementById('');
+    const raritiesList = document.getElementById('raritiesList');
+    raritiesList.innerHTML = '';
     for (const rarity in rarities) {
         const chance = Math.round(rarities[rarity]); // Round the chance to the nearest whole number
         const li = document.createElement('li');
+        li.innerText = `${rarity}: ${chance}%`; // Display the rounded chance
         raritiesList.appendChild(li);
     }
 }
