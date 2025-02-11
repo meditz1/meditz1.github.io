@@ -5,70 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skibidy Clicker</title>
     <style>
-        /* Make the game area take up the entire screen */
-/* Game area takes up the top portion of the screen */
-#gameArea {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80%; /* Adjust this value to control the height of the game area */
-    background-color: LightCyan;
-}
-
-/* Money display at the bottom left */
-#money {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    font-size: 50px;
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background for better visibility */
-    padding: 10px; /* Optional: Add padding */
-    border-radius: 5px; /* Optional: Add rounded corners */
-}
-
-/* Upgrade buttons at the bottom center */
-#upgradeButtons {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%); /* Center the buttons horizontally */
-    display: flex;
-    gap: 10px; /* Space between buttons */
-    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background */
-    padding: 10px; /* Optional: Add padding */
-    border-radius: 5px; /* Optional: Add rounded corners */
-}
-
-/* Style for upgrade buttons */
-.upgradeButton {
-    font-size: 16px;
-    padding: 10px 20px;
-    cursor: pointer;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-}
-
-/* Rarities chances at the bottom right */
-#raritiesChances {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background */
-    padding: 10px; /* Optional: Add padding */
-    border-radius: 5px; /* Optional: Add rounded corners */
-}
-
-/* Style for the rarities list */
-#raritiesList {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
+        #gameArea {
+            position: relative;
+            width: 1200px;
+            height: 800px;
+            background-color: LightCyan;
+        }
+        .image {
+            position: absolute;
+            width: 15px; /* Default size */
+            height: 15px; /* Default size */
+            cursor: pointer;
+            transition: width 0.3s, height 0.3s; /* Smooth transition for resizing */
+        }
+        #money {
+            position: fixed;
+            top: 25px;
+            right: 270px;
+            font-size: 50px;
+            font-weight: bold;
+        }
+        #inventory {
+            margin-top: 20px;
+        }
+        .inventory-item {
+            display: inline-block;
+            text-align: center;
+            margin: 5px;
+        }
+        .inventory-item img {
+            width: 40px;
+            height: 40px;
+            display: block;
+        }
+        .sell-button {
+            font-size: 12px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+        #upgradeButtons {
+            position: fixed;
+            top: 1000px;
+            right: 50px; /* Adjusted to move further right */
+        }
+        .upgradeButton {
+            font-size: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        #raritiesChances {
+            position: fixed;
+            top: 300px;
+            right: 50px; /* Adjusted to move further right */
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #raritiesList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -77,9 +76,9 @@
     <div id="money">0</div>
     <div id="upgradeButtons">
         <button class="upgradeButton" id="upgradeImageSize">Upgrade Image Size ($100)</button>
-        <button class="upgradeButton" id="upgradeImageDuration">Upgrade Image Duration ($100)</button>
-        <button class="upgradeButton" id="upgradeInventorySpace">Upgrade Inventory Space ($100)</button>
-        <button class="upgradeButton" id="upgradeLuck">Upgrade Luck ($100)</button>
+        <button class="upgradeButton" id="upgradeImageDuration">Upgrade Image Duration ($200)</button>
+        <button class="upgradeButton" id="upgradeInventorySpace">Upgrade Inventory Space ($300)</button>
+        <button class="upgradeButton" id="upgradeLuck">Upgrade Luck ($500)</button>
     </div>
     <div id="raritiesChances">
         <h3>rarities Chances</h3>
@@ -353,7 +352,7 @@ function upgradeLuck() {
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
         document.getElementById('money').innerText = Math.round(money); // Round the money display
         document.getElementById('upgradeLuck').innerText = `Upgrade Luck ($${upgradeCosts.luck})`;
-        alert(`Luck upgraded! + ${0 + luck}.`);
+        alert(`Luck upgraded! You now compare ${10 + luck} images.`);
     } else {
         alert('Not enough money!');
     }
