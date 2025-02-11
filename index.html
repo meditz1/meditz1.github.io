@@ -5,69 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skibidy Clicker</title>
     <style>
-        #gameArea {
-            position: relative;
-            width: 800px;
-            height: 500px;
-            background-color: LightCyan;
-        }
-        .image {
-            position: absolute;
-            width: 15px; /* Default size */
-            height: 15px; /* Default size */
-            cursor: pointer;
-            transition: width 0.3s, height 0.3s; /* Smooth transition for resizing */
-        }
-        #money {
-            position: fixed;
-            top: 25px;
-            right: 270px;
-            font-size: 50px;
-            font-weight: bold;
-        }
-        #inventory {
-            margin-top: 20px;
-        }
-        .inventory-item {
-            display: inline-block;
-            text-align: center;
-            margin: 5px;
-        }
-        .inventory-item img {
-            width: 40px;
-            height: 40px;
-            display: block;
-        }
-        .sell-button {
-            font-size: 12px;
-            margin-top: 5px;
-            cursor: pointer;
-        }
-        #upgradeButtons {
-            position: fixed;
-            top: 100px;
-            left: 250px; /* Adjusted to move further right */
-        }
-        .upgradeButton {
-            font-size: 20px;
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-        #raritiesChances {
-            position: fixed;
-            top: 300px;
-            right: 50px; /* Adjusted to move further right */
-            background-color: white;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #raritiesList {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+        /* Make the game area take up the entire screen */
+#gameArea {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: LightCyan;
+}
+
+/* Position the money display at the bottom left */
+#money {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 50px;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background for better visibility */
+    padding: 10px; /* Optional: Add padding */
+    border-radius: 5px; /* Optional: Add rounded corners */
+}
+
+/* Position the upgrade buttons at the bottom center */
+#upgradeButtons {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%); /* Center the buttons horizontally */
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background */
+    padding: 10px; /* Optional: Add padding */
+    border-radius: 5px; /* Optional: Add rounded corners */
+}
+
+/* Style for upgrade buttons */
+.upgradeButton {
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Position the rarities chances at the bottom right */
+#raritiesChances {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background */
+    padding: 10px; /* Optional: Add padding */
+    border-radius: 5px; /* Optional: Add rounded corners */
+}
+
+/* Style for the rarities list */
+#raritiesList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
     </style>
 </head>
 <body>
