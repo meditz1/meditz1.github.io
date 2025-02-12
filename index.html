@@ -5,15 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skibidy Clicker</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
         #gameArea {
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
+            position: relative;
+            width: 800px;
+            height: 500px;
             background-color: LightCyan;
         }
         .image {
@@ -24,16 +19,14 @@
             transition: width 0.3s, height 0.3s; /* Smooth transition for resizing */
         }
         #money {
-            position: absolute;
-            top: calc(100vh + 20px);
-            left: 20px;
+            position: fixed;
+            top: 25px;
+            right: 270px;
             font-size: 50px;
             font-weight: bold;
         }
         #inventory {
-            position: absolute;
-            top: calc(100vh + 100px);
-            left: 20px;
+            margin-top: 20px;
         }
         .inventory-item {
             display: inline-block;
@@ -51,9 +44,9 @@
             cursor: pointer;
         }
         #upgradeButtons {
-            position: absolute;
-            top: calc(100vh + 20px);
-            right: 20px;
+            position: fixed;
+            top: 100px;
+            right: 50px; /* Adjusted to move further right */
         }
         .upgradeButton {
             font-size: 20px;
@@ -62,9 +55,9 @@
             margin-bottom: 10px;
         }
         #raritiesChances {
-            position: absolute;
-            top: calc(100vh + 200px);
-            right: 20px;
+            position: fixed;
+            top: 300px;
+            right: 50px; /* Adjusted to move further right */
             background-color: white;
             padding: 10px;
             border: 1px solid #ccc;
