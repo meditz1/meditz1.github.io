@@ -7,9 +7,9 @@
     <style>
         #gameArea {
             position: relative;
-            width: 800px;
-            height: 500px;
-            background-color: LightCyan;
+            width: 1100px;
+            height: 600px;
+            background-color: Black;
         }
         .image {
             position: absolute;
@@ -20,8 +20,8 @@
         }
         #money {
             position: fixed;
-            top: 25px;
-            right: 270px;
+            top: 20px;
+            left: 1125px;
             font-size: 50px;
             font-weight: bold;
         }
@@ -45,8 +45,8 @@
         }
         #upgradeButtons {
             position: fixed;
-            top: 100px;
-            right: 50px; /* Adjusted to move further right */
+            top: 750px;
+            left: 50px; /* Adjusted to move further right */
         }
         .upgradeButton {
             font-size: 20px;
@@ -72,21 +72,20 @@
 </head>
 <body>
 
-    <div id="gameArea"></div>
-    <div id="money">0</div>
-    <div id="upgradeButtons">
-        <button class="upgradeButton" id="upgradeImageSize">Upgrade Image Size ($100)</button>
-        <button class="upgradeButton" id="upgradeImageDuration">Upgrade Image Duration ($200)</button>
-        <button class="upgradeButton" id="upgradeInventorySpace">Upgrade Inventory Space ($300)</button>
-        <button class="upgradeButton" id="upgradeLuck">Upgrade Luck ($500)</button>
-    </div>
-    <div id="raritiesChances">
-        <h3>rarities Chances</h3>
-        <ul id="raritiesList"></ul>
-    </div>
-    <div id="inventory"></div>
+<div id="gameArea"></div>
+<div id="money">0</div>
+<button class="upgradeButton" id="upgradeImageSize" style="position: fixed; top: 100px; left: 1125px;">Image Size ($100)</button>
+<button class="upgradeButton" id="upgradeImageDuration" style="position: fixed; top: 175px; left: 1125px;">Image Duration ($200)</button>
+<button class="upgradeButton" id="upgradeInventorySpace" style="position: fixed; top: 250px; left: 1125px;">Inventory Space ($300)</button>
+<button class="upgradeButton" id="upgradeLuck" style="position: fixed; top: 325px; left: 1125px;">Luck ($500)</button>
 
-    <script>
+<div id="raritiesChances">
+    <h3>Rarities Chances</h3>
+    <ul id="raritiesList"></ul>
+</div>
+<div id="inventory"></div>
+
+<script>
         const rarities = {
             common: 73.89,
             uncommon: 20,
