@@ -202,8 +202,33 @@ function getRandomrarities() {
             return { rarities, image };
         }
 
+        function getRandomImage() {
+            const rarities = getRandomrarities();
+            const image = images[rarities][Math.floor(Math.random() * images[rarities].length)];
+            return { rarities, image };
+        }
+
 function displayImage() {
-    const { rarities, image } = getRandomImage(); // Get a random image based on rarity weights
+    const baseComparisons = 1; // Base number of comparisons
+    const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
+
+    let highestRarityImage = null; // Store the highest rarity image
+    let highestRarityKey = 'common'; // Start with the lowest rarity
+
+    // Define the order of rarities from lowest to highest
+    const rarityOrder = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythical'];
+
+    // Generate and compare multiple random images
+    for (let i = 0; i < totalComparisons; i++) {
+        const randomImage = getRandomImage(); // Get a random image
+        const currentRarityKey = randomImage.rarities;
+
+        // Compare the current rarity with the highest rarity found so far
+        if (rarityOrder.indexOf(currentRarityKey) > rarityOrder.indexOf(highestRarityKey)) {
+            highestRarityKey = currentRarityKey;
+            highestRarityImage = randomImage;
+        }
+    }
 
     // Create an image element
     const imgElement = document.createElement('img');
@@ -229,7 +254,6 @@ function displayImage() {
             alert('Inventory is full!');
         }
     };
-
     document.getElementById('gameArea').appendChild(imgElement);
 
     // Remove image after the specified duration
