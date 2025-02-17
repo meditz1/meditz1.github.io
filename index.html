@@ -80,7 +80,6 @@
 <button class="upgradeButton" id="upgradeLuck" style="position: fixed; top: 325px; left: 1125px;">Luck ($500)</button>
 
 <div id="raritiesChances">
-    <h3>Rarities Chances</h3>
     <ul id="raritiesList"></ul>
 </div>
 <div id="inventory"></div>
@@ -393,7 +392,6 @@ function upgradeLuck() {
 
 function displayraritiesChances() {
     const raritiesList = document.getElementById('raritiesList');
-    raritiesList.innerHTML = '';
     for (const rarity in rarities) {
         const chance = Math.round(rarities[rarity]); // Round the chance to the nearest whole number
         const li = document.createElement('li');
@@ -405,7 +403,6 @@ function displayraritiesChances() {
 window.onload = function() {
     document.getElementById('money').innerText = `$${Math.round(money)}`;
     updateInventory();
-    displayraritiesChances();
     setInterval(displayImage, 50);
 
     // Add event listeners for the upgrade buttons
