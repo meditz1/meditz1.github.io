@@ -54,7 +54,21 @@
             cursor: pointer;
             margin-bottom: 10px;
         }
-
+        #raritiesChances {
+            position: fixed;
+            top: 300px;
+            right: 50px; /* Adjusted to move further right */
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #raritiesList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
@@ -66,6 +80,7 @@
 <button class="upgradeButton" id="upgradeLuck" style="position: fixed; top: 325px; left: 1125px;">Luck ($500)</button>
 
 <div id="raritiesChances">
+    <h3>Rarities Chances</h3>
     <ul id="raritiesList"></ul>
 </div>
 <div id="inventory"></div>
@@ -389,6 +404,7 @@ function displayraritiesChances() {
 window.onload = function() {
     document.getElementById('money').innerText = `$${Math.round(money)}`;
     updateInventory();
+    displayraritiesChances();
     setInterval(displayImage, 50);
 
     // Add event listeners for the upgrade buttons
