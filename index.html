@@ -233,23 +233,31 @@ function displayImage() {
     }
 
     // Create an image element
+        // Create an image element
     const imgElement = document.createElement('img');
-    imgElement.src = highestRarityImage.image;
+    imgElement.src = image;
     imgElement.className = 'image';
-    imgElement.alt = highestRarityImage.rarities;
-    imgElement.style.top = `${Math.random() * 350}px`;
-    imgElement.style.left = `${Math.random() * 550}px`;
+    imgElement.alt = rarities;
+
+    // Calculate maximum allowed positions to keep the image within the game area
+    const maxTop = 600 - imageSize; // gameArea height - image height
+    const maxLeft = 1100 - imageSize; // gameArea width - image width
+
+    // Set random positions within the allowed range
+    imgElement.style.top = `${Math.random() * maxTop}px`;
+    imgElement.style.left = `${Math.random() * maxLeft}px`;
     imgElement.style.width = `${imageSize}px`;
     imgElement.style.height = `${imageSize}px`;
 
     imgElement.onclick = function () {
         if (inventory.length < inventoryLimit) {
-            addToInventory(highestRarityImage.image);
+            addToInventory(image);
             imgElement.remove();
         } else {
             alert('Inventory is full!');
         }
     };
+
 
     document.getElementById('gameArea').appendChild(imgElement);
 
