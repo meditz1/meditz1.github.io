@@ -224,6 +224,14 @@ function displayImage() {
         }
     }
 
+    // If no image was selected (shouldn't happen), default to a common image
+    if (!highestRarityImage) {
+        highestRarityImage = {
+            image: images.common[Math.floor(Math.random() * images.common.length)],
+            rarities: 'common'
+        };
+    }
+
     // Create an image element
     const imgElement = document.createElement('img');
     imgElement.src = highestRarityImage.image;
