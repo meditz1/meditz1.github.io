@@ -189,10 +189,10 @@ function getRandomrarities() {
     let randomWeight = Math.random() * totalWeight;
 
     for (const rarity in rarities) {
-        randomWeight -= rarities[rarity]; // Subtract the weight of the current rarity
-        if (randomWeight <= 0) {
-            return rarity; // Return the selected rarity
+        if (randomWeight < rarities[rarity]) {
+            return rarity;
         }
+        randomWeight -= rarities[rarity];
     }
 }
 
