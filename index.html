@@ -378,7 +378,7 @@ function upgradeLuck() {
     const cost = Math.round(upgradeCosts.luck); // Round the cost
     if (money >= cost) {
         money -= cost;
-        luck += 1;
+        luck += 10;
         upgradeCosts.luck = Math.round(upgradeCosts.luck * 1.1); // Round the new cost
         localStorage.setItem('money', money);
         localStorage.setItem('luck', luck);
