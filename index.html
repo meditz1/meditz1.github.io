@@ -233,11 +233,10 @@ function displayImage() {
     }
 
     // Create an image element
-        // Create an image element
     const imgElement = document.createElement('img');
-    imgElement.src = image;
+    imgElement.src = highestRarityImage.image; // Use the correct image URL
     imgElement.className = 'image';
-    imgElement.alt = rarities;
+    imgElement.alt = highestRarityImage.rarities;
 
     // Calculate maximum allowed positions to keep the image within the game area
     const maxTop = 600 - imageSize; // gameArea height - image height
@@ -251,13 +250,12 @@ function displayImage() {
 
     imgElement.onclick = function () {
         if (inventory.length < inventoryLimit) {
-            addToInventory(image);
+            addToInventory(highestRarityImage.image);
             imgElement.remove();
         } else {
             alert('Inventory is full!');
         }
     };
-
 
     document.getElementById('gameArea').appendChild(imgElement);
 
@@ -305,7 +303,7 @@ function displayImage() {
             for (const rarities in images) {
                 if (images[rarities].includes(imgSrc)) {
                     switch (rarities) {
-                        case 'common': raritiesValue = 1; break;
+                        case 'common': raritiesValue = 10000; break;
                         case 'uncommon': raritiesValue = 5; break;
                         case 'rare': raritiesValue = 25; break;
                         case 'epic': raritiesValue = 100; break;
