@@ -403,9 +403,9 @@ function displayraritiesChances() {
 }
 
 window.onload = function() {
-    document.getElementById('money').innerText = Math.round(money); // Round the money display
+    document.getElementById('money').innerText = `$${Math.round(money)}`;
     updateInventory();
-    displayraritiesChances(); // Display initial rarities chances
+    displayraritiesChances();
     setInterval(displayImage, 50);
 
     // Add event listeners for the upgrade buttons
