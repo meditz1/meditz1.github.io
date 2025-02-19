@@ -70,6 +70,17 @@
 </head>
 <body>
 
+<!-- Audio element for background music -->
+<audio id="backgroundMusic" loop>
+    <source src="elevator-music-bossa-nova-background-music-version-60s-10900.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Mute button -->
+<button id="muteButton" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer;">
+    Mute
+</button>
+    
 <div id="gameArea"></div>
 <div id="money">$0</div>
 <button class="upgradeButton" id="upgradeImageSize" style="position: absolute; top: 175px; left: 1125px;">Image Size ($100)</button>
@@ -90,6 +101,34 @@
 <div id="inventory"></div>
 
 <script>
+
+// Get references to the audio element and mute button
+const backgroundMusic = document.getElementById('backgroundMusic');
+const muteButton = document.getElementById('muteButton');
+
+// Autoplay the music and handle browser restrictions
+document.addEventListener('DOMContentLoaded', () => {
+    backgroundMusic.play().catch(() => {
+        // Autoplay was prevented, show a message or handle it
+        console.log('Autoplay was blocked by the browser. Click the mute button to play.');
+    });
+});
+
+// Mute button functionality
+let isMuted = false;
+muteButton.addEventListener('click', () => {
+    if (isMuted) {
+        backgroundMusic.play();
+        muteButton.innerText = 'Mute';
+    } else {
+        backgroundMusic.pause();
+        muteButton.innerText = 'Unmute';
+    }
+    isMuted = !isMuted;
+});
+
+// Ensure the music loops infinitely
+backgroundMusic.loop = true;
         const rarities = {
             common: 73.89,
             uncommon: 20,
