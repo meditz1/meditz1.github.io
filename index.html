@@ -79,8 +79,10 @@
 
 <button class="upgradeButton" id="buy1x" style="position: absolute; top: 100px; left: 1115px;">1x</button>
 <button class="upgradeButton" id="buy10x" style="position: absolute; top: 100px; left: 1185px;">10x</button>
-<button class="upgradeButton" id="buy100x" style="position: absolute; top: 100px; left: 1270px;">100x</button>
+<button class="upgradeButton" id="buy100x" style="position: absolute; top: 100px; left: 1265px;">100x</button>
 <button class="upgradeButton" id="buyMax" style="position: absolute; top: 100px; left: 1355px;">Max</button>
+
+<button class="upgradeButton" id="sellAllButton" style="position: absolute; top: 475px; left: 1125px;">Sell All</button>
 
 <div id="raritiesChances">
     <ul id="raritiesList"></ul>
@@ -444,6 +446,51 @@ function upgradeInventorySpace() {
     }
 }
 
+function sellAllItems() {
+    if (inventory.length === 0) {
+        alert('Inventory is empty!');
+        return;
+    }
+
+    let totalEarnings = 0;
+
+    // Calculate total earnings from all items
+    inventory.forEach((imgSrc) => {
+        let raritiesValue = 0;
+
+        for (const rarities in images) {
+            if (images[rarities].includes(imgSrc)) {
+                switch (rarities) {
+                    case 'common': raritiesValue = 10000; break;
+                    case 'uncommon': raritiesValue = 5; break;
+                    case 'rare': raritiesValue = 25; break;
+                    case 'epic': raritiesValue = 100; break;
+                    case 'legendary': raritiesValue = 500; break;
+                    case 'mythical': raritiesValue = 7777; break;
+                }
+                break;
+            }
+        }
+
+        totalEarnings += raritiesValue;
+    });
+
+    // Add earnings to money
+    money += totalEarnings;
+    inventory = []; // Clear the inventory
+
+    // Update localStorage and UI
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    localStorage.setItem('money', money);
+    document.getElementById('money').innerText = `$${Math.round(money)}`;
+    updateInventory();
+
+    alert(`Sold all items for $${totalEarnings}!`);
+}
+
+// Add event listener for the "Sell All" button
+document.getElementById('sellAllButton').onclick = sellAllItems;
+
 function upgradeLuck() {
     const baseCost = upgradeCosts.luck;
     let totalCost = baseCost;
@@ -503,6 +550,9 @@ window.onload = function() {
     document.getElementById('buy100x').onclick = function() { setMultiplier(100); };
     document.getElementById('buyMax').onclick = function() { setMultiplier('max'); };
 
+    // Add event listener for the "Sell All" button
+    document.getElementById('sellAllButton').onclick = sellAllItems;
+
     // Update button texts with current costs
     document.getElementById('upgradeImageSize').innerText = `Drop Size ($${Math.round(upgradeCosts.imageSize)})`;
     document.getElementById('upgradeImageDuration').innerText = `Drop Duration ($${Math.round(upgradeCosts.imageDuration)})`;
@@ -513,3 +563,4 @@ window.onload = function() {
 
 </body>
 </html>
+
