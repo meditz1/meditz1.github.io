@@ -8,15 +8,15 @@
         #gameArea {
             position: relative;
             width: 1100px;
-            height: 600px;
+            height: 800px;
             background-color: Black;
         }
         .image {
             position: absolute;
-            width: 15px; /* Default size */
-            height: 15px; /* Default size */
+            width: 15px;
+            height: 15px;
             cursor: pointer;
-            transition: width 0.3s, height 0.3s; /* Smooth transition for resizing */
+            transition: width 0.3s, height 0.3s;
         }
         #money {
             position: absolute;
@@ -42,29 +42,97 @@
             font-size: 12px;
             margin-top: 5px;
             cursor: pointer;
+            background-color: #04d04f;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease;
+        }
+        .sell-button:hover {
+            background-color: #cc2500;
         }
         #upgradeButtons {
             position: absolute;
             top: 750px;
-            left: 50px; /* Adjusted to move further right */
+            left: 50px;
         }
         .upgradeButton {
             font-size: 20px;
             padding: 10px 15px;
             cursor: pointer;
             margin-bottom: 10px;
-            
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .upgradeButton:hover {
+            background-color: #029516;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .upgradeButton:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         #raritiesChances {
             position: fixed;
             top: 300px;
-            right: 50px; /* Adjusted to move further right */
+            right: 50px;
             background-color: white;
         }
         #raritiesList {
             list-style-type: none;
             padding: 0;
             margin: 0;
+        }
+        #muteButton {
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #muteButton:hover {
+            background-color: #555;
+        }
+        #statsDisplay {
+            position: absolute;
+            top: 550px;
+            right: 50px;
+            background-color: rgb(0, 0, 0);
+            padding: 15px;
+            border-radius: 5px;
+            color: rgb(250, 250, 250);
+            font-size: 16px;
+            width: 200px;
+        }
+        .stat-item {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        @keyframes moneyGain {
+            0% { color: inherit; }
+            50% { color: #00ff00; }
+            100% { color: inherit; }
+        }
+        @keyframes moneyLoss {
+            0% { color: inherit; }
+            50% { color: #ff0000; }
+            100% { color: inherit; }
+        }
+        .money-gain {
+            animation: moneyGain .5s ease;
+        }
+        .money-loss {
+            animation: moneyLoss .5s ease;
         }
     </style>
 </head>
@@ -100,22 +168,42 @@
 </div>
 <div id="inventory"></div>
 
+<div id="statsDisplay">
+    <div class="stat-item">
+        <span>Drop Size:</span>
+        <span id="currentSize">15px</span>
+    </div>
+    <div class="stat-item">
+        <span>Duration:</span>
+        <span id="currentDuration">1.0s</span>
+    </div>
+    <div class="stat-item">
+        <span>Inventory Space:</span>
+        <span id="currentSpace">5</span>
+    </div>
+    <div class="stat-item">
+        <span>Luck Level:</span>
+        <span id="currentLuck">0</span>
+    </div>
+</div>
+
 <script>
 
 // Get references to the audio element and mute button
 const backgroundMusic = document.getElementById('backgroundMusic');
 const muteButton = document.getElementById('muteButton');
 
-// Autoplay the music and handle browser restrictions
+// Initialize music as paused
+let isMuted = true;
+muteButton.innerText = 'Unmute';
+
+// Autoplay is not needed since we want to start paused
 document.addEventListener('DOMContentLoaded', () => {
-    backgroundMusic.play().catch(() => {
-        // Autoplay was prevented, show a message or handle it
-        console.log('Autoplay was blocked by the browser. Click the mute button to play.');
-    });
+    // Don't autoplay - start paused
+    backgroundMusic.pause();
 });
 
 // Mute button functionality
-let isMuted = false;
 muteButton.addEventListener('click', () => {
     if (isMuted) {
         backgroundMusic.play();
@@ -282,7 +370,7 @@ function displayImage() {
     imgElement.alt = highestRarityImage.rarities;
 
     // Calculate maximum allowed positions to keep the image within the game area
-    const maxTop = 600 - imageSize; // gameArea height - image height
+    const maxTop = 800 - imageSize; // gameArea height - image height
     const maxLeft = 1100 - imageSize; // gameArea width - image width
 
     // Set random positions within the allowed range
@@ -319,6 +407,7 @@ function displayImage() {
         function updateInventory() {
             const inventoryArea = document.getElementById('inventory');
             inventoryArea.innerHTML = '';
+
             inventory.forEach((image, index) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'inventory-item';
@@ -337,6 +426,21 @@ function displayImage() {
                 itemDiv.appendChild(sellButton);
                 inventoryArea.appendChild(itemDiv);
             });
+
+            for (let i = inventory.length; i < inventoryLimit; i++) {
+                const emptySlot = document.createElement('div');
+                emptySlot.className = 'inventory-item';
+
+                const emptyImg = document.createElement('div');
+                emptyImg.style.width = '80px';
+                emptyImg.style.height = '80px';
+                emptyImg.style.backgroundColor = '#808080';
+                emptyImg.style.display = 'block';
+                emptyImg.style.marginBottom = '17px';
+
+                emptySlot.appendChild(emptyImg);
+                inventoryArea.appendChild(emptySlot);
+            }
         }
 
 function sellItem(index) {
@@ -362,7 +466,7 @@ function sellItem(index) {
 
     localStorage.setItem('inventory', JSON.stringify(inventory));
     localStorage.setItem('money', money);
-    document.getElementById('money').innerText = `$${Math.round(money)}`; // Ensure $ is included
+    updateMoneyDisplay(money, true);
     updateInventory();
 }
 
@@ -370,7 +474,16 @@ let upgradeMultiplier = 1; // Default to 1x
 
 function setMultiplier(multiplier) {
     upgradeMultiplier = multiplier;
-    alert(`Upgrade multiplier set to ${multiplier}x`);
+    updateMultiplierDisplay(multiplier);
+}
+
+function updateMultiplierDisplay(multiplier) {
+    const buttons = ['buy1x', 'buy10x', 'buy100x', 'buyMax'];
+    buttons.forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        const isSelected = (buttonId === `buy${multiplier}x`) || (buttonId === 'buyMax' && multiplier === 'max');
+        button.style.backgroundColor = isSelected ? '#029516' : '#4CAF50';
+    });
 }
 
 function calculateMaxUpgrades(baseCost, currentMoney) {
@@ -411,9 +524,9 @@ function upgradeImageSize() {
         localStorage.setItem('money', money);
         localStorage.setItem('imageSize', imageSize);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
-        document.getElementById('money').innerText = `$${Math.round(money)}`;
+        updateMoneyDisplay(money, false);
         document.getElementById('upgradeImageSize').innerText = `Drop Size ($${upgradeCosts.imageSize})`;
-        alert(`Image size upgraded by ${5 * upgrades}px!`);
+        document.getElementById('currentSize').innerText = `${imageSize}px`;
     } else {
         alert('Not enough money!');
     }
@@ -444,9 +557,9 @@ function upgradeImageDuration() {
         localStorage.setItem('money', money);
         localStorage.setItem('imageDuration', imageDuration);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
-        document.getElementById('money').innerText = `$${Math.round(money)}`;
+        updateMoneyDisplay(money, false);
         document.getElementById('upgradeImageDuration').innerText = `Drop Duration ($${upgradeCosts.imageDuration})`;
-        alert(`Image duration upgraded by ${0.5 * upgrades} seconds!`);
+        document.getElementById('currentDuration').innerText = `${(imageDuration/1000).toFixed(1)}s`;
     } else {
         alert('Not enough money!');
     }
@@ -477,9 +590,9 @@ function upgradeInventorySpace() {
         localStorage.setItem('money', money);
         localStorage.setItem('inventoryLimit', inventoryLimit);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
-        document.getElementById('money').innerText = `$${Math.round(money)}`;
+        updateMoneyDisplay(money, false);
         document.getElementById('upgradeInventorySpace').innerText = `Space ($${upgradeCosts.inventorySpace})`;
-        alert(`Inventory space upgraded by ${1 * upgrades} slots!`);
+        document.getElementById('currentSpace').innerText = inventoryLimit;
     } else {
         alert('Not enough money!');
     }
@@ -521,10 +634,8 @@ function sellAllItems() {
     // Update localStorage and UI
     localStorage.setItem('inventory', JSON.stringify(inventory));
     localStorage.setItem('money', money);
-    document.getElementById('money').innerText = `$${Math.round(money)}`;
+    updateMoneyDisplay(money, true);
     updateInventory();
-
-    alert(`Sold all items for $${totalEarnings}!`);
 }
 
 // Add event listener for the "Sell All" button
@@ -555,9 +666,9 @@ function upgradeLuck() {
         localStorage.setItem('money', money);
         localStorage.setItem('luck', luck);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
-        document.getElementById('money').innerText = `$${Math.round(money)}`;
+        updateMoneyDisplay(money, false);
         document.getElementById('upgradeLuck').innerText = `Luck ($${upgradeCosts.luck})`;
-        alert(`Luck upgraded by ${10 * upgrades}!`);
+        document.getElementById('currentLuck').innerText = luck;
     } else {
         alert('Not enough money!');
     }
@@ -572,7 +683,48 @@ function displayraritiesChances() {
     }
 }
 
+function addStyleToHead() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes moneyGain {
+            0% { color: inherit; }
+            50% { color: #00ff00; }
+            100% { color: inherit; }
+        }
+        
+        @keyframes moneyLoss {
+            0% { color: inherit; }
+            50% { color: #ff0000; }
+            100% { color: inherit; }
+        }
+        
+        .money-gain {
+            animation: moneyGain 1s ease;
+        }
+        
+        .money-loss {
+            animation: moneyLoss 1s ease;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function updateMoneyDisplay(newMoney, isGain = true) {
+    const moneyDisplay = document.getElementById('money');
+    moneyDisplay.innerText = `$${Math.round(newMoney)}`;
+    
+    // Remove existing animation classes
+    moneyDisplay.classList.remove('money-gain', 'money-loss');
+    
+    // Force a reflow to restart animation
+    void moneyDisplay.offsetWidth;
+    
+    // Add appropriate animation class
+    moneyDisplay.classList.add(isGain ? 'money-gain' : 'money-loss');
+}
+
 window.onload = function() {
+    addStyleToHead();
     document.getElementById('money').innerText = `$${Math.round(money)}`;
     updateInventory();
     setInterval(displayImage, 50);
@@ -583,11 +735,12 @@ window.onload = function() {
     document.getElementById('upgradeInventorySpace').onclick = upgradeInventorySpace;
     document.getElementById('upgradeLuck').onclick = upgradeLuck;
 
-    // Add event listeners for the new multiplier buttons
+    // Add event listeners for the multiplier buttons and set initial state
     document.getElementById('buy1x').onclick = function() { setMultiplier(1); };
     document.getElementById('buy10x').onclick = function() { setMultiplier(10); };
     document.getElementById('buy100x').onclick = function() { setMultiplier(100); };
     document.getElementById('buyMax').onclick = function() { setMultiplier('max'); };
+    updateMultiplierDisplay(1); // Set initial multiplier display
 
     // Add event listener for the "Sell All" button
     document.getElementById('sellAllButton').onclick = sellAllItems;
@@ -597,9 +750,14 @@ window.onload = function() {
     document.getElementById('upgradeImageDuration').innerText = `Drop Duration ($${Math.round(upgradeCosts.imageDuration)})`;
     document.getElementById('upgradeInventorySpace').innerText = `Space ($${Math.round(upgradeCosts.inventorySpace)})`;
     document.getElementById('upgradeLuck').innerText = `Luck ($${Math.round(upgradeCosts.luck)})`;
+
+    // Initialize stats display
+    document.getElementById('currentSize').innerText = `${imageSize}px`;
+    document.getElementById('currentDuration').innerText = `${(imageDuration/1000).toFixed(1)}s`;
+    document.getElementById('currentSpace').innerText = inventoryLimit;
+    document.getElementById('currentLuck').innerText = luck;
 };
     </script>
 
 </body>
 </html>
-
