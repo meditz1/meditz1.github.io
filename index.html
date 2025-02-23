@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Skibidy Clicker</title>
     <style>
         #gameArea {
@@ -15,6 +15,14 @@
             overflow: hidden;
             touch-action: none;
         }
+
+        /* Add media query for mobile devices */
+        @media (max-width: 768px) {
+            #gameArea {
+                height: 50vh; /* Shorter height on mobile */
+            }
+        }
+
         .image {
             position: absolute;
             width: 30px;
@@ -822,10 +830,6 @@ window.onload = function() {
         gameArea.style.height = `${window.innerHeight * 0.6}px`;
     });
 };
-    </script>
-
-</body>
-</html>
     </script>
 
 </body>
