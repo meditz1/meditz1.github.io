@@ -7,31 +7,41 @@
     <style>
         #gameArea {
             position: relative;
-            width: 1100px;
-            height: 800px;
+            width: 100%;
+            max-width: 1200px;
+            height: 80vh;
             background-color: Black;
+            margin: 0 auto;
+            overflow: hidden;
         }
         .image {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
             transition: width 0.3s, height 0.3s;
+            touch-action: none;
         }
         #money {
-            position: absolute;
-            top: 20px;
-            left: 1125px;
-            font-size: 50px;
+            position: relative;
+            text-align: center;
+            top: 0;
+            left: 0;
+            font-size: 2rem;
             font-weight: bold;
+            margin: 10px 0;
         }
         #inventory {
-            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px auto;
+            max-width: 1200px;
+            padding: 0 10px;
         }
         .inventory-item {
-            display: inline-block;
-            text-align: center;
-            margin: 5px;
+            flex: 0 0 auto;
         }
         .inventory-item img {
             width: 80px;
@@ -58,16 +68,11 @@
             left: 50px;
         }
         .upgradeButton {
-            font-size: 20px;
-            padding: 10px 15px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            padding: 8px 12px;
+            flex: 1 1 auto;
+            min-width: 120px;
+            max-width: 200px;
         }
         .upgradeButton:hover {
             background-color: #029516;
@@ -79,10 +84,12 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         #raritiesChances {
-            position: fixed;
-            top: 300px;
-            right: 50px;
-            background-color: white;
+            position: relative;
+            top: auto;
+            right: auto;
+            margin: 10px auto;
+            max-width: 1200px;
+            width: 90%;
         }
         #raritiesList {
             list-style-type: none;
@@ -90,28 +97,23 @@
             margin: 0;
         }
         #muteButton {
-            background-color: #000000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        #muteButton:hover {
-            background-color: #555;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
         }
         #statsDisplay {
-            position: absolute;
-            top: 550px;
-            right: 50px;
+            position: relative;
+            top: auto;
+            right: auto;
+            margin: 10px auto;
+            max-width: 300px;
+            width: 90%;
             background-color: rgb(0, 0, 0);
             padding: 15px;
             border-radius: 5px;
             color: rgb(250, 250, 250);
             font-size: 16px;
-            width: 200px;
         }
         .stat-item {
             margin: 5px 0;
@@ -134,6 +136,35 @@
         .money-loss {
             animation: moneyLoss .5s ease;
         }
+        .controls-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px auto;
+            max-width: 800px;
+            padding: 0 10px;
+        }
+        /* Media queries for larger screens */
+        @media (min-width: 768px) {
+            .image {
+                width: 15px;
+                height: 15px;
+            }
+            #money {
+                font-size: 2.5rem;
+            }
+            .upgradeButton {
+                font-size: 1.2rem;
+            }
+        }
+        /* Prevent text selection */
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -151,22 +182,21 @@
     
 <div id="gameArea"></div>
 <div id="money">$0</div>
-<button class="upgradeButton" id="upgradeImageSize" style="position: absolute; top: 175px; left: 1125px;">Image Size ($100)</button>
-<button class="upgradeButton" id="upgradeImageDuration" style="position: absolute; top: 250px; left: 1125px;">Image Duration ($200)</button>
-<button class="upgradeButton" id="upgradeInventorySpace" style="position: absolute; top: 325px; left: 1125px;">Inventory Space ($300)</button>
-<button class="upgradeButton" id="upgradeLuck" style="position: absolute; top: 400px; left: 1125px;">Luck ($500)</button>
 
-<button class="upgradeButton" id="buy1x" style="position: absolute; top: 100px; left: 1115px;">1x</button>
-<button class="upgradeButton" id="buy10x" style="position: absolute; top: 100px; left: 1185px;">10x</button>
-<button class="upgradeButton" id="buy100x" style="position: absolute; top: 100px; left: 1265px;">100x</button>
-<button class="upgradeButton" id="buyMax" style="position: absolute; top: 100px; left: 1355px;">Max</button>
-
-<button class="upgradeButton" id="sellAllButton" style="position: absolute; top: 475px; left: 1125px;">Sell All</button>
-
-<div id="raritiesChances">
-    <ul id="raritiesList"></ul>
+<div class="controls-container">
+    <button class="upgradeButton" id="buy1x">1x</button>
+    <button class="upgradeButton" id="buy10x">10x</button>
+    <button class="upgradeButton" id="buy100x">100x</button>
+    <button class="upgradeButton" id="buyMax">Max</button>
 </div>
-<div id="inventory"></div>
+
+<div class="controls-container">
+    <button class="upgradeButton" id="upgradeImageSize">Image Size ($100)</button>
+    <button class="upgradeButton" id="upgradeImageDuration">Image Duration ($200)</button>
+    <button class="upgradeButton" id="upgradeInventorySpace">Inventory Space ($300)</button>
+    <button class="upgradeButton" id="upgradeLuck">Luck ($500)</button>
+    <button class="upgradeButton" id="sellAllButton">Sell All</button>
+</div>
 
 <div id="statsDisplay">
     <div class="stat-item">
@@ -186,6 +216,11 @@
         <span id="currentLuck">0</span>
     </div>
 </div>
+
+<div id="raritiesChances">
+    <ul id="raritiesList"></ul>
+</div>
+<div id="inventory"></div>
 
 <script>
 
@@ -369,13 +404,21 @@ function displayImage() {
     imgElement.className = 'image';
     imgElement.alt = highestRarityImage.rarities;
 
-    // Calculate maximum allowed positions to keep the image within the game area
-    const maxTop = 800 - imageSize; // gameArea height - image height
-    const maxLeft = 1100 - imageSize; // gameArea width - image width
+    // Get current gameArea dimensions
+    const gameArea = document.getElementById('gameArea');
+    const gameAreaRect = gameArea.getBoundingClientRect();
+    
+    // Calculate maximum allowed positions
+    const maxTop = gameAreaRect.height - imageSize;
+    const maxLeft = gameAreaRect.width - imageSize;
+
+    // Ensure positions are within bounds
+    const randomTop = Math.max(0, Math.min(maxTop, Math.random() * maxTop));
+    const randomLeft = Math.max(0, Math.min(maxLeft, Math.random() * maxLeft));
 
     // Set random positions within the allowed range
-    imgElement.style.top = `${Math.random() * maxTop}px`;
-    imgElement.style.left = `${Math.random() * maxLeft}px`;
+    imgElement.style.top = `${randomTop}px`;
+    imgElement.style.left = `${randomLeft}px`;
     imgElement.style.width = `${imageSize}px`;
     imgElement.style.height = `${imageSize}px`;
 
@@ -778,6 +821,10 @@ window.onload = function() {
         gameArea.style.height = `${window.innerHeight * 0.6}px`;
     });
 };
+    </script>
+
+</body>
+</html>
     </script>
 
 </body>
