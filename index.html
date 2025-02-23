@@ -450,11 +450,11 @@ function sellItem(index) {
     for (const rarities in images) {
         if (images[rarities].includes(imgSrc)) {
             switch (rarities) {
-                case 'common': raritiesValue = 10000; break;
-                case 'uncommon': raritiesValue = 5; break;
-                case 'rare': raritiesValue = 25; break;
-                case 'epic': raritiesValue = 100; break;
-                case 'legendary': raritiesValue = 500; break;
+                case 'common': raritiesValue = 10; break;
+                case 'uncommon': raritiesValue = 50; break;
+                case 'rare': raritiesValue = 100; break;
+                case 'epic': raritiesValue = 500; break;
+                case 'legendary': raritiesValue = 1000; break;
                 case 'mythical': raritiesValue = 7777; break;
             }
             break;
