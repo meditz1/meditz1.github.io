@@ -401,9 +401,24 @@ function displayImage() {
 
     // Create an image element
     const imgElement = document.createElement('img');
-    imgElement.src = highestRarityImage.image; // Use the correct image URL
+    imgElement.src = highestRarityImage.image;
     imgElement.className = 'image';
     imgElement.alt = highestRarityImage.rarities;
+
+    // Add both click and touch handlers
+    const handleInteraction = function(e) {
+        e.preventDefault(); // Prevent default touch behavior
+        if (inventory.length < inventoryLimit) {
+            addToInventory(highestRarityImage.image);
+            imgElement.remove();
+        } else {
+            alert('Inventory is full!');
+        }
+    };
+
+    // Add both mouse and touch event listeners
+    imgElement.addEventListener('click', handleInteraction);
+    imgElement.addEventListener('touchstart', handleInteraction, { passive: false });
 
     // Get current gameArea dimensions
     const gameArea = document.getElementById('gameArea');
@@ -422,15 +437,6 @@ function displayImage() {
     imgElement.style.left = `${randomLeft}px`;
     imgElement.style.width = `${imageSize}px`;
     imgElement.style.height = `${imageSize}px`;
-
-    imgElement.onclick = function () {
-        if (inventory.length < inventoryLimit) {
-            addToInventory(highestRarityImage.image);
-            imgElement.remove();
-        } else {
-            alert('Inventory is full!');
-        }
-    };
 
     document.getElementById('gameArea').appendChild(imgElement);
 
@@ -816,6 +822,10 @@ window.onload = function() {
         gameArea.style.height = `${window.innerHeight * 0.6}px`;
     });
 };
+    </script>
+
+</body>
+</html>
     </script>
 
 </body>
