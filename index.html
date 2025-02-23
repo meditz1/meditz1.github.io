@@ -13,6 +13,7 @@
             background-color: Black;
             margin: 0 auto;
             overflow: hidden;
+            touch-action: none;
         }
         .image {
             position: absolute;
@@ -800,20 +801,14 @@ window.onload = function() {
     document.getElementById('currentSpace').innerText = inventoryLimit;
     document.getElementById('currentLuck').innerText = luck;
 
-    // Prevent default touch behaviors
-    document.addEventListener('touchmove', function(e) {
+    // Remove the global touch event prevention
+    // Only prevent default touch behavior in the game area
+    document.getElementById('gameArea').addEventListener('touchmove', function(e) {
         e.preventDefault();
     }, { passive: false });
 
-    // Disable double-tap zoom
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', function(e) {
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) {
-            e.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, false);
+    // Remove the double-tap zoom prevention
+    // The game area touch handling is sufficient
 
     // Adjust game area size on orientation change
     window.addEventListener('orientationchange', function() {
@@ -821,10 +816,6 @@ window.onload = function() {
         gameArea.style.height = `${window.innerHeight * 0.6}px`;
     });
 };
-    </script>
-
-</body>
-</html>
     </script>
 
 </body>
