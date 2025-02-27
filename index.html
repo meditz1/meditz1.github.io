@@ -92,6 +92,11 @@
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+        .upgradeButton.unaffordable:hover {
+            background-color: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
         #raritiesChances {
             position: relative;
             top: auto;
@@ -174,6 +179,96 @@
             -moz-user-select: none;
             -ms-user-select: none;
         }
+        #achievementsDisplay {
+            position: relative;
+            margin: 10px auto;
+            max-width: 300px;
+            width: 90%;
+            background-color: #000;
+            padding: 15px;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .achievement {
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 3px;
+            background-color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .achievement.unlocked {
+            background-color: #1a472a;
+        }
+
+        .achievement-bonus {
+            font-size: 0.8em;
+            color: #4CAF50;
+        }
+
+        /* Particle effect styles */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particle-animation 1s ease-out forwards;
+        }
+
+        @keyframes particle-animation {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Screen shake animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.2s ease-in-out;
+        }
+
+        /* Pop effect for clicked images */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(0); }
+        }
+
+        .pop {
+            animation: pop 0.2s ease-out forwards;
+        }
+
+        /* Particle styles */
+        .collect-particle {
+            position: absolute;
+            pointer-events: none;
+            font-weight: bold;
+            animation: float-up 0.5s ease-out forwards;
+            z-index: 1000;
+            color: #ffffff;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50px) scale(1.2);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -224,12 +319,29 @@
         <span>Luck Level:</span>
         <span id="currentLuck">0</span>
     </div>
+    <div class="stat-item">
+        <span>Total Clicks:</span>
+        <span id="totalClicks">0</span>
+    </div>
+    <div class="stat-item">
+        <span>Items Found:</span>
+        <span id="totalItems">0</span>
+    </div>
 </div>
 
 <div id="raritiesChances">
     <ul id="raritiesList"></ul>
 </div>
 <div id="inventory"></div>
+
+<!-- Modify achievements display to be collapsible -->
+<div id="achievementsDisplay">
+    <div id="achievementsHeader" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+        <h3>Achievements (Bonus: <span id="achievementBonus">0</span>%)</h3>
+        <span id="toggleArrow">▼</span>
+    </div>
+    <div id="achievementsList" style="display: none; max-height: 300px; overflow-y: auto;"></div>
+</div>
 
 <script>
 
@@ -359,6 +471,92 @@ backgroundMusic.loop = true;
             luck: 10
         };
 
+        // Add stats and achievements tracking
+        let stats = JSON.parse(localStorage.getItem('stats')) || {
+            totalClicks: 0,
+            totalItems: 0,
+            rareFound: 0,
+            mythicalFound: 0,
+            legendaryFound: 0,
+            epicFound: 0
+        };
+
+        // Make sure achievements are defined with proper structure
+        const achievements = {
+            collector_i: {
+                name: "Collector I",
+                description: "Collect 10 items",
+                check: () => stats.totalItems >= 10,
+                unlocked: false
+            },
+            collector_ii: {
+                name: "Collector II",
+                description: "Collect 100 items",
+                check: () => stats.totalItems >= 100,
+                unlocked: false
+            },
+            collector_iii: {
+                name: "Collector III",
+                description: "Collect 1,000 items",
+                check: () => stats.totalItems >= 1000,
+                unlocked: false
+            },
+            rare_i: {
+                name: "Rare Hunter I",
+                description: "Find 5 rare or better items",
+                check: () => stats.rareFound >= 5,
+                unlocked: false
+            },
+            rare_ii: {
+                name: "Rare Hunter II",
+                description: "Find 25 rare or better items",
+                check: () => stats.rareFound >= 25,
+                unlocked: false
+            },
+            mythical_i: {
+                name: "Mythical I",
+                description: "Find your first mythical item",
+                check: () => stats.mythicalFound >= 1,
+                unlocked: false
+            },
+            mythical_ii: {
+                name: "Mythical II",
+                description: "Find 5 mythical items",
+                check: () => stats.mythicalFound >= 5,
+                unlocked: false
+            },
+            money_i: {
+                name: "Money I",
+                description: "Have 10,000 money at once",
+                check: () => money >= 10000,
+                unlocked: false
+            },
+            money_ii: {
+                name: "Money II",
+                description: "Have 1,000,000 money at once",
+                check: () => money >= 1000000,
+                unlocked: false
+            },
+            clicks_i: {
+                name: "Clicks I",
+                description: "Click 1,000 times",
+                check: () => stats.totalClicks >= 1000,
+                unlocked: false
+            },
+            legendary_i: {
+                name: "Legendary I",
+                description: "Find 10 legendary items",
+                check: () => stats.legendaryFound >= 10,
+                unlocked: false
+            },
+            epic_i: {
+                name: "Epic I",
+                description: "Find 50 epic items",
+                check: () => stats.epicFound >= 50,
+                unlocked: false
+            }
+        };
+
 function getRandomrarities() {
     const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
     let randomWeight = Math.random() * totalWeight;
@@ -413,12 +611,55 @@ function displayImage() {
     imgElement.className = 'image';
     imgElement.alt = highestRarityImage.rarities;
 
-    // Add both click and touch handlers
+    // Add click/touch handler with effects
     const handleInteraction = function(e) {
-        e.preventDefault(); // Prevent default touch behavior
+        e.preventDefault();
         if (inventory.length < inventoryLimit) {
+            stats.totalClicks++;
+            stats.totalItems++;
+            
+            // Add pop animation class
+            imgElement.classList.add('pop');
+            
+            // Get click position for effect
+            const rect = imgElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Create collection effect
+            createCollectEffect(centerX, centerY, highestRarityImage.rarities);
+            
+            // Create particles based on rarity
+            const colors = {
+                common: '#cccccc',
+                uncommon: '#00ff00',
+                rare: '#0000ff',
+                epic: '#purple',
+                legendary: '#ffd700',
+                mythical: '#ff0000'
+            };
+            
+            createParticles(centerX, centerY, colors[highestRarityImage.rarities]);
+            
+            // Track rarity finds and handle special effects
+            switch(highestRarityImage.rarities) {
+                case 'mythical':
+                    stats.mythicalFound++;
+                    shakeScreen();
+                    break;
+                case 'legendary':
+                    stats.legendaryFound++;
+                    break;
+                case 'epic':
+                    stats.epicFound++;
+                    break;
+            }
+            
             addToInventory(highestRarityImage.image);
             imgElement.remove();
+            
+            updateStats();
+            checkAchievements();
         } else {
             alert('Inventory is full!');
         }
@@ -501,6 +742,17 @@ function displayImage() {
             }
         }
 
+function calculateAchievementBonus() {
+    let bonus = 0;
+    for (const achievement of Object.values(achievements)) {
+        if (achievement.unlocked) {
+            bonus += 1;
+        }
+    }
+    document.getElementById('achievementBonus').textContent = bonus;
+    return bonus;
+}
+
 function sellItem(index) {
     const imgSrc = inventory[index];
     let raritiesValue = 0;
@@ -519,6 +771,10 @@ function sellItem(index) {
         }
     }
 
+    // Apply achievement bonus
+    const bonus = calculateAchievementBonus();
+    raritiesValue = Math.floor(raritiesValue * (1 + bonus / 100));
+
     money += raritiesValue;
     inventory.splice(index, 1);
 
@@ -526,6 +782,8 @@ function sellItem(index) {
     localStorage.setItem('money', money);
     updateMoneyDisplay(money, true);
     updateInventory();
+    checkAchievements(); // Check achievements after selling
+    updateUpgradeButtons();
 }
 
 let upgradeMultiplier = 1; // Default to 1x
@@ -533,6 +791,7 @@ let upgradeMultiplier = 1; // Default to 1x
 function setMultiplier(multiplier) {
     upgradeMultiplier = multiplier;
     updateMultiplierDisplay(multiplier);
+    updateUpgradeButtons();
 }
 
 function updateMultiplierDisplay(multiplier) {
@@ -578,7 +837,7 @@ function upgradeImageSize() {
     if (money >= totalCost) {
         money -= totalCost;
         imageSize += 5 * upgrades;
-        upgradeCosts.imageSize = Math.round(baseCost * Math.pow(1.1, upgrades));
+        upgradeCosts.imageSize = Math.round(baseCost * Math.pow(10, upgrades));
         localStorage.setItem('money', money);
         localStorage.setItem('imageSize', imageSize);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
@@ -671,7 +930,7 @@ function sellAllItems() {
         for (const rarities in images) {
             if (images[rarities].includes(imgSrc)) {
                 switch (rarities) {
-                    case 'common': raritiesValue = 10000; break;
+                    case 'common': raritiesValue = 10; break;
                     case 'uncommon': raritiesValue = 5; break;
                     case 'rare': raritiesValue = 25; break;
                     case 'epic': raritiesValue = 100; break;
@@ -694,6 +953,7 @@ function sellAllItems() {
     localStorage.setItem('money', money);
     updateMoneyDisplay(money, true);
     updateInventory();
+    updateUpgradeButtons();
 }
 
 // Add event listener for the "Sell All" button
@@ -781,6 +1041,138 @@ function updateMoneyDisplay(newMoney, isGain = true) {
     moneyDisplay.classList.add(isGain ? 'money-gain' : 'money-loss');
 }
 
+function createParticles(x, y, color) {
+    for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.backgroundColor = color;
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+        particle.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 1000);
+    }
+}
+
+function shakeScreen() {
+    const gameArea = document.getElementById('gameArea');
+    gameArea.classList.add('shake');
+    setTimeout(() => gameArea.classList.remove('shake'), 200);
+}
+
+function updateStats() {
+    document.getElementById('totalClicks').innerText = stats.totalClicks;
+    document.getElementById('totalItems').innerText = stats.totalItems;
+    localStorage.setItem('stats', JSON.stringify(stats));
+}
+
+function checkAchievements() {
+    let newUnlock = false;
+    for (const [id, achievement] of Object.entries(achievements)) {
+        if (!achievement.unlocked && achievement.check()) {
+            achievement.unlocked = true;
+            newUnlock = true;
+            showAchievementNotification(achievement.name);
+            console.log(`Achievement unlocked: ${achievement.name}`);
+        }
+    }
+    if (newUnlock) {
+        updateAchievementsDisplay();
+        localStorage.setItem('achievements', JSON.stringify(achievements));
+    }
+}
+
+function showAchievementNotification(name) {
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.left = '50%';
+    notification.style.transform = 'translateX(-50%)';
+    notification.style.backgroundColor = '#1a472a';
+    notification.style.color = 'white';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.zIndex = '1000';
+    notification.textContent = `Achievement Unlocked: ${name}!`;
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+function updateAchievementsDisplay() {
+    const achievementsList = document.getElementById('achievementsList');
+    achievementsList.innerHTML = '';
+    
+    for (const achievement of Object.values(achievements)) {
+        const div = document.createElement('div');
+        div.className = `achievement ${achievement.unlocked ? 'unlocked' : ''}`;
+        div.innerHTML = `
+            <span>${achievement.name}: ${achievement.description}</span>
+            <span class="achievement-bonus">+1%</span>
+        `;
+        achievementsList.appendChild(div);
+    }
+    
+    calculateAchievementBonus();
+}
+
+function createCollectEffect(x, y, rarity) {
+    // Create floating text
+    const text = document.createElement('div');
+    text.className = 'collect-particle';
+    text.style.left = `${x}px`;
+    text.style.top = `${y}px`;
+    text.style.color = '#ffffff'; // Make all text white
+    text.style.position = 'absolute';
+    text.style.pointerEvents = 'none';
+    text.style.zIndex = '1000';
+    text.style.fontWeight = 'bold';
+    
+    text.textContent = '+1';
+    document.body.appendChild(text);
+    
+    // Remove the element after animation
+    setTimeout(() => text.remove(), 500);
+}
+
+function updateUpgradeButtons() {
+    const upgrades = {
+        'upgradeImageSize': upgradeCosts.imageSize,
+        'upgradeImageDuration': upgradeCosts.imageDuration,
+        'upgradeInventorySpace': upgradeCosts.inventorySpace,
+        'upgradeLuck': upgradeCosts.luck
+    };
+
+    for (const [buttonId, baseCost] of Object.entries(upgrades)) {
+        const button = document.getElementById(buttonId);
+        const multiplier = upgradeMultiplier === 'max' ? 
+            calculateMaxUpgrades(baseCost, money) : 
+            upgradeMultiplier;
+        
+        let totalCost = 0;
+        if (upgradeMultiplier === 'max') {
+            let currentCost = baseCost;
+            for (let i = 0; i < multiplier; i++) {
+                totalCost += currentCost;
+                currentCost = Math.round(currentCost * 1.1);
+            }
+        } else {
+            totalCost = baseCost * multiplier;
+        }
+
+        const displayText = {
+            'upgradeImageSize': 'Drop Size',
+            'upgradeImageDuration': 'Drop Duration',
+            'upgradeInventorySpace': 'Space',
+            'upgradeLuck': 'Luck'
+        };
+
+        button.innerText = `${displayText[buttonId]} ($${Math.round(totalCost)})`;
+        button.classList.toggle('unaffordable', money < totalCost);
+    }
+}
+
 window.onload = function() {
     addStyleToHead();
     document.getElementById('money').innerText = `$${Math.round(money)}`;
@@ -800,7 +1192,7 @@ window.onload = function() {
     document.getElementById('buyMax').onclick = function() { setMultiplier('max'); };
     updateMultiplierDisplay(1); // Set initial multiplier display
 
-    // Add event listener for the "Sell All" button
+    // Add event listeners for the "Sell All" button
     document.getElementById('sellAllButton').onclick = sellAllItems;
 
     // Update button texts with current costs
@@ -829,7 +1221,39 @@ window.onload = function() {
         const gameArea = document.getElementById('gameArea');
         gameArea.style.height = `${window.innerHeight * 0.6}px`;
     });
+
+    // Load achievements from localStorage
+    const savedAchievements = localStorage.getItem('achievements');
+    if (savedAchievements) {
+        const loadedAchievements = JSON.parse(savedAchievements);
+        for (const [key, value] of Object.entries(loadedAchievements)) {
+            if (achievements[key]) {
+                achievements[key].unlocked = value.unlocked;
+            }
+        }
+    }
+    
+    updateStats();
+    updateAchievementsDisplay();
+    checkAchievements();
+
+    const achievementsHeader = document.getElementById('achievementsHeader');
+    const achievementsList = document.getElementById('achievementsList');
+    const toggleArrow = document.getElementById('toggleArrow');
+    
+    achievementsHeader.addEventListener('click', () => {
+        const isVisible = achievementsList.style.display === 'block';
+        achievementsList.style.display = isVisible ? 'none' : 'block';
+        toggleArrow.textContent = isVisible ? '▼' : '▲';
+    });
+
+    // Add periodic updates for button states
+    setInterval(updateUpgradeButtons, 100);
 };
+    </script>
+
+</body>
+</html>
     </script>
 
 </body>
