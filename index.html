@@ -84,7 +84,7 @@
             max-width: 200px;
         }
         .upgradeButton:hover {
-            background-color: #029516;
+            background-color: #00a516;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
@@ -93,7 +93,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .upgradeButton.unaffordable:hover {
-            background-color: #cc0000;
+            background-color: #138228;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
@@ -269,6 +269,33 @@
                 opacity: 0;
             }
         }
+
+        /* Add these styles in the <style> section */
+        #autoCollector {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.8);  /* Make it white with some transparency */
+            border: 2px solid #4CAF50;
+            border-radius: 50%;
+            pointer-events: none;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+            transition: width 0.3s, height 0.3s;  /* Smooth size transitions */
+        }
+
+        /* Add glow animation for auto-collected images */
+        @keyframes autoCollectGlow {
+            0% { filter: drop-shadow(0 0 5px red); }
+            50% { filter: drop-shadow(0 0 15px red); }
+            100% { filter: drop-shadow(0 0 5px red); }
+        }
+
+        .auto-collect-glow {
+            animation: autoCollectGlow 0.5s ease-out forwards, pop 0.5s ease-out forwards;
+        }
     </style>
 </head>
 <body>
@@ -299,7 +326,13 @@
     <button class="upgradeButton" id="upgradeImageDuration">Image Duration ($200)</button>
     <button class="upgradeButton" id="upgradeInventorySpace">Inventory Space ($300)</button>
     <button class="upgradeButton" id="upgradeLuck">Luck ($500)</button>
+    <button class="upgradeButton" id="upgradeSpawnRate">Spawn Rate ($100)</button>
     <button class="upgradeButton" id="sellAllButton">Sell All</button>
+</div>
+
+<div class="controls-container">
+    <button class="upgradeButton" id="upgradeAutoCollector">Auto Collector ($1000)</button>
+    <button class="upgradeButton" id="upgradeCollectorSize">Collector Size ($500)</button>
 </div>
 
 <div id="statsDisplay">
@@ -326,6 +359,10 @@
     <div class="stat-item">
         <span>Items Found:</span>
         <span id="totalItems">0</span>
+    </div>
+    <div class="stat-item">
+        <span>Spawn Rate:</span>
+        <span id="currentSpawnRate">50ms</span>
     </div>
 </div>
 
@@ -463,12 +500,15 @@ backgroundMusic.loop = true;
         let imageDuration = parseInt(localStorage.getItem('imageDuration')) || 1000; // Default duration (1 second)
         let inventoryLimit = parseInt(localStorage.getItem('inventoryLimit')) || 5; // Default inventory limit
         let luck = parseInt(localStorage.getItem('luck')) || 0; // Default luck
+        let spawnRate = parseInt(localStorage.getItem('spawnRate')) || 50; // Default 50ms
 
         let upgradeCosts = JSON.parse(localStorage.getItem('upgradeCosts')) || {
             imageSize: 10,
             imageDuration: 10,
             inventorySpace: 10,
-            luck: 10
+            luck: 10,
+            spawnRate: 10,
+            autoCollector: 1000
         };
 
         // Add stats and achievements tracking
@@ -557,6 +597,11 @@ backgroundMusic.loop = true;
             }
         };
 
+        // Add these variables with the other global variables
+        let hasAutoCollector = JSON.parse(localStorage.getItem('hasAutoCollector')) || false;
+        let autoCollectorSize = parseInt(localStorage.getItem('autoCollectorSize')) || 30;
+        let collectorSizeCost = parseInt(localStorage.getItem('collectorSizeCost')) || 500;
+
 function getRandomrarities() {
     const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
     let randomWeight = Math.random() * totalWeight;
@@ -576,28 +621,24 @@ function getRandomrarities() {
         }
 
 function displayImage() {
-    const baseComparisons = 1; // Base number of comparisons
-    const totalComparisons = baseComparisons + luck; // Increase comparisons based on luck
+    const baseComparisons = 1;
+    const totalComparisons = baseComparisons + luck;
 
-    let highestRarityImage = null; // Store the highest rarity image
-    let highestRarityKey = 'common'; // Start with the lowest rarity
+    let highestRarityImage = null;
+    let highestRarityKey = 'common';
 
-    // Define the order of rarities from lowest to highest
     const rarityOrder = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythical'];
 
-    // Generate and compare multiple random images
     for (let i = 0; i < totalComparisons; i++) {
-        const randomImage = getRandomImage(); // Get a random image
+        const randomImage = getRandomImage();
         const currentRarityKey = randomImage.rarities;
 
-        // Compare the current rarity with the highest rarity found so far
         if (rarityOrder.indexOf(currentRarityKey) > rarityOrder.indexOf(highestRarityKey)) {
             highestRarityKey = currentRarityKey;
             highestRarityImage = randomImage;
         }
     }
 
-    // If no image was selected (shouldn't happen), default to a common image
     if (!highestRarityImage) {
         highestRarityImage = {
             image: images.common[Math.floor(Math.random() * images.common.length)],
@@ -687,9 +728,67 @@ function displayImage() {
     imgElement.style.width = `${imageSize}px`;
     imgElement.style.height = `${imageSize}px`;
 
-    document.getElementById('gameArea').appendChild(imgElement);
+    gameArea.appendChild(imgElement);
 
-    // Remove image after the specified duration
+    // Auto collector check
+    if (hasAutoCollector) {
+        const collector = document.getElementById('autoCollector');
+        if (collector) {
+            const collectorRect = collector.getBoundingClientRect();
+            const imageRect = imgElement.getBoundingClientRect();
+            
+            // Check if image overlaps with collector
+            if (!(imageRect.right < collectorRect.left || 
+                  imageRect.left > collectorRect.right || 
+                  imageRect.bottom < collectorRect.top || 
+                  imageRect.top > collectorRect.bottom)) {
+                
+                if (inventory.length < inventoryLimit) {
+                    // Add glow effect before collecting
+                    imgElement.classList.add('auto-collect-glow');
+                    
+                    // Delay the collection to match the animation
+                    setTimeout(() => {
+                        // Update stats
+                        stats.totalClicks++;
+                        stats.totalItems++;
+                        
+                        // Track rarity finds
+                        switch(highestRarityImage.rarities) {
+                            case 'mythical':
+                                stats.mythicalFound++;
+                                shakeScreen();
+                                break;
+                            case 'legendary':
+                                stats.legendaryFound++;
+                                break;
+                            case 'epic':
+                                stats.epicFound++;
+                                break;
+                            case 'rare':
+                                stats.rareFound++;
+                                break;
+                        }
+                        
+                        // Create visual effects
+                        const centerX = imageRect.left + imageRect.width / 2;
+                        const centerY = imageRect.top + imageRect.height / 2;
+                        createCollectEffect(centerX, centerY, highestRarityImage.rarities);
+                        
+                        // Add to inventory and update UI
+                        addToInventory(highestRarityImage.image);
+                        imgElement.remove();
+                        
+                        // Update stats and check achievements
+                        updateStats();
+                        checkAchievements();
+                    }, 500); // Match the animation duration
+                }
+            }
+        }
+    }
+
+    // Remove image after duration
     setTimeout(() => {
         if (imgElement.parentElement) {
             imgElement.remove();
@@ -793,13 +892,14 @@ function setMultiplier(multiplier) {
     updateMultiplierDisplay(multiplier);
     updateUpgradeButtons();
 }
+//save point
 
 function updateMultiplierDisplay(multiplier) {
     const buttons = ['buy1x', 'buy10x', 'buy100x', 'buyMax'];
     buttons.forEach(buttonId => {
         const button = document.getElementById(buttonId);
         const isSelected = (buttonId === `buy${multiplier}x`) || (buttonId === 'buyMax' && multiplier === 'max');
-        button.style.backgroundColor = isSelected ? '#029516' : '#4CAF50';
+        button.style.backgroundColor = isSelected ? '#004b0a' : '#4CAF50';
     });
 }
 
@@ -1118,22 +1218,22 @@ function updateAchievementsDisplay() {
 }
 
 function createCollectEffect(x, y, rarity) {
-    // Create floating text
+    // Create floating text with larger size
     const text = document.createElement('div');
     text.className = 'collect-particle';
     text.style.left = `${x}px`;
     text.style.top = `${y}px`;
-    text.style.color = '#ffffff'; // Make all text white
+    text.style.color = '#ffffff';
     text.style.position = 'absolute';
     text.style.pointerEvents = 'none';
     text.style.zIndex = '1000';
     text.style.fontWeight = 'bold';
+    text.style.fontSize = '24px';
     
     text.textContent = '+1';
     document.body.appendChild(text);
     
-    // Remove the element after animation
-    setTimeout(() => text.remove(), 500);
+    setTimeout(() => text.remove(), 1000);
 }
 
 function updateUpgradeButtons() {
@@ -1141,7 +1241,8 @@ function updateUpgradeButtons() {
         'upgradeImageSize': upgradeCosts.imageSize,
         'upgradeImageDuration': upgradeCosts.imageDuration,
         'upgradeInventorySpace': upgradeCosts.inventorySpace,
-        'upgradeLuck': upgradeCosts.luck
+        'upgradeLuck': upgradeCosts.luck,
+        'upgradeSpawnRate': upgradeCosts.spawnRate
     };
 
     for (const [buttonId, baseCost] of Object.entries(upgrades)) {
@@ -1165,11 +1266,120 @@ function updateUpgradeButtons() {
             'upgradeImageSize': 'Drop Size',
             'upgradeImageDuration': 'Drop Duration',
             'upgradeInventorySpace': 'Space',
-            'upgradeLuck': 'Luck'
+            'upgradeLuck': 'Luck',
+            'upgradeSpawnRate': 'Spawn Rate'
         };
 
         button.innerText = `${displayText[buttonId]} ($${Math.round(totalCost)})`;
         button.classList.toggle('unaffordable', money < totalCost);
+    }
+}
+
+function upgradeSpawnRate() {
+    const baseCost = upgradeCosts.spawnRate;  // Removed the || 100 since we now initialize it properly
+    let totalCost = baseCost;
+    let upgrades = 1;
+
+    if (upgradeMultiplier === 'max') {
+        upgrades = calculateMaxUpgrades(baseCost, money);
+        totalCost = 0;
+        let currentCost = baseCost;
+        for (let i = 0; i < upgrades; i++) {
+            totalCost += currentCost;
+            currentCost = Math.round(currentCost * 1.1);
+        }
+    } else {
+        upgrades = upgradeMultiplier;
+        totalCost = baseCost * upgrades;
+    }
+
+    if (money >= totalCost) {
+        money -= totalCost;
+        spawnRate = Math.max(10, spawnRate - (2 * upgrades)); // Minimum 10ms spawn rate
+        upgradeCosts.spawnRate = Math.round(baseCost * Math.pow(1.1, upgrades));
+        
+        localStorage.setItem('money', money);
+        localStorage.setItem('spawnRate', spawnRate);
+        localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
+        
+        updateMoneyDisplay(money, false);
+        document.getElementById('upgradeSpawnRate').innerText = `Spawn Rate ($${upgradeCosts.spawnRate})`;
+        document.getElementById('currentSpawnRate').innerText = `${spawnRate}ms`;
+        
+        // Clear existing interval and set new one
+        if (window.spawnInterval) {
+            clearInterval(window.spawnInterval);
+        }
+        window.spawnInterval = setInterval(displayImage, spawnRate);
+    } else {
+        alert('Not enough money!');
+    }
+}
+
+function upgradeAutoCollector() {
+    const cost = upgradeCosts.autoCollector;
+    
+    if (hasAutoCollector) {
+        // If already purchased, disable the button
+        const button = document.getElementById('upgradeAutoCollector');
+        button.disabled = true;
+        button.style.backgroundColor = '#666666';
+        button.style.cursor = 'not-allowed';
+        button.innerText = 'Auto Collector (Purchased)';
+        return;
+    }
+    
+    if (money >= cost) {
+        money -= cost;
+        hasAutoCollector = true;
+        
+        let collector = document.getElementById('autoCollector');
+        if (!collector) {
+            collector = document.createElement('div');
+            collector.id = 'autoCollector';
+            document.getElementById('gameArea').appendChild(collector);
+        }
+        
+        collector.style.display = 'block';
+        collector.style.width = `${autoCollectorSize}px`;
+        collector.style.height = `${autoCollectorSize}px`;
+        
+        // Disable the button after purchase
+        const button = document.getElementById('upgradeAutoCollector');
+        button.disabled = true;
+        button.style.backgroundColor = '#666666';
+        button.style.cursor = 'not-allowed';
+        button.innerText = 'Auto Collector (Purchased)';
+        
+        localStorage.setItem('money', money);
+        localStorage.setItem('hasAutoCollector', JSON.stringify(hasAutoCollector));
+        updateMoneyDisplay(money, false);
+    } else {
+        alert('Not enough money!');
+    }
+}
+
+function upgradeCollectorSize() {
+    if (money >= collectorSizeCost) {
+        money -= collectorSizeCost;
+        autoCollectorSize += 10;
+        
+        const collector = document.getElementById('autoCollector');
+        if (collector) {
+            collector.style.width = `${autoCollectorSize}px`;
+            collector.style.height = `${autoCollectorSize}px`;
+        }
+        
+        collectorSizeCost = Math.round(collectorSizeCost * 1.1);
+        
+        localStorage.setItem('money', money);
+        localStorage.setItem('autoCollectorSize', autoCollectorSize);
+        localStorage.setItem('collectorSizeCost', collectorSizeCost);
+        
+        updateMoneyDisplay(money, false);
+        document.getElementById('upgradeCollectorSize').innerText = `Collector Size ($${collectorSizeCost})`;
+    } else {
+        alert('Not enough money!');
     }
 }
 
@@ -1184,6 +1394,7 @@ window.onload = function() {
     document.getElementById('upgradeImageDuration').onclick = upgradeImageDuration;
     document.getElementById('upgradeInventorySpace').onclick = upgradeInventorySpace;
     document.getElementById('upgradeLuck').onclick = upgradeLuck;
+    document.getElementById('upgradeSpawnRate').onclick = upgradeSpawnRate;
 
     // Add event listeners for the multiplier buttons and set initial state
     document.getElementById('buy1x').onclick = function() { setMultiplier(1); };
@@ -1195,11 +1406,23 @@ window.onload = function() {
     // Add event listeners for the "Sell All" button
     document.getElementById('sellAllButton').onclick = sellAllItems;
 
+    // Ensure spawn rate cost is initialized
+    if (!upgradeCosts.spawnRate) {
+        upgradeCosts.spawnRate = 10;
+    }
+
+    // Ensure all upgrade costs are initialized
+    if (!upgradeCosts.autoCollector) {
+        upgradeCosts.autoCollector = 1000;
+    }
+
     // Update button texts with current costs
     document.getElementById('upgradeImageSize').innerText = `Drop Size ($${Math.round(upgradeCosts.imageSize)})`;
     document.getElementById('upgradeImageDuration').innerText = `Drop Duration ($${Math.round(upgradeCosts.imageDuration)})`;
     document.getElementById('upgradeInventorySpace').innerText = `Space ($${Math.round(upgradeCosts.inventorySpace)})`;
     document.getElementById('upgradeLuck').innerText = `Luck ($${Math.round(upgradeCosts.luck)})`;
+    document.getElementById('upgradeSpawnRate').innerText = `Spawn Rate ($${Math.round(upgradeCosts.spawnRate)})`;
+    document.getElementById('upgradeAutoCollector').innerText = `Auto Collector ($${Math.round(upgradeCosts.autoCollector)})`;
 
     // Initialize stats display
     document.getElementById('currentSize').innerText = `${imageSize}px`;
@@ -1249,11 +1472,38 @@ window.onload = function() {
 
     // Add periodic updates for button states
     setInterval(updateUpgradeButtons, 100);
-};
-    </script>
 
-</body>
-</html>
+    // Store the interval ID so we can clear it later
+    window.spawnInterval = setInterval(displayImage, spawnRate);
+    
+    // Update spawn rate display
+    document.getElementById('currentSpawnRate').innerText = `${spawnRate}ms`;
+
+    // Initialize auto collector button state
+    if (hasAutoCollector) {
+        const button = document.getElementById('upgradeAutoCollector');
+        button.disabled = true;
+        button.style.backgroundColor = '#666666';
+        button.style.cursor = 'not-allowed';
+        button.innerText = 'Auto Collector (Purchased)';
+    }
+    
+    // Add event listener for auto collector upgrade
+    document.getElementById('upgradeAutoCollector').onclick = upgradeAutoCollector;
+
+    // Initialize collector size upgrade button
+    document.getElementById('upgradeCollectorSize').onclick = upgradeCollectorSize;
+    document.getElementById('upgradeCollectorSize').innerText = `Collector Size ($${collectorSizeCost})`;
+    
+    // Update collector size if it exists
+    if (hasAutoCollector) {
+        const collector = document.getElementById('autoCollector');
+        if (collector) {
+            collector.style.width = `${autoCollectorSize}px`;
+            collector.style.height = `${autoCollectorSize}px`;
+        }
+    }
+};
     </script>
 
 </body>
