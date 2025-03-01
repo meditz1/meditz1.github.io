@@ -9,7 +9,7 @@
             position: relative;
             width: 100%;
             max-width: 1200px;
-            height: 80vh;
+            height: 70vh;
             background-color: Black;
             margin: 0 auto;
             overflow: hidden;
@@ -82,20 +82,26 @@
             flex: 1 1 auto;
             min-width: 120px;
             max-width: 200px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         .upgradeButton:hover {
             background-color: #00a516;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .upgradeButton:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        .upgradeButton.unaffordable {
+            background-color: #666666;
+            cursor: not-allowed;
         }
         .upgradeButton.unaffordable:hover {
-            background-color: #138228;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background-color: #666666;
+            transform: none;
+            box-shadow: none;
         }
         #raritiesChances {
             position: relative;
@@ -118,11 +124,8 @@
         }
         #statsDisplay {
             position: relative;
-            top: auto;
-            right: auto;
-            margin: 10px auto;
-            max-width: 300px;
-            width: 90%;
+            margin: 0;
+            width: 100%;
             background-color: rgb(0, 0, 0);
             padding: 15px;
             border-radius: 5px;
@@ -156,7 +159,7 @@
             justify-content: center;
             gap: 10px;
             margin: 10px auto;
-            max-width: 800px;
+            max-width: 1200px;
             padding: 0 10px;
         }
         /* Media queries for larger screens */
@@ -171,6 +174,10 @@
             .upgradeButton {
                 font-size: 1.2rem;
             }
+            
+            #gameArea {
+                height: 75vh;
+            }
         }
         /* Prevent text selection */
         * {
@@ -181,9 +188,8 @@
         }
         #achievementsDisplay {
             position: relative;
-            margin: 10px auto;
-            max-width: 300px;
-            width: 90%;
+            margin: 0;
+            width: 100%;
             background-color: #000;
             padding: 15px;
             border-radius: 5px;
@@ -270,31 +276,102 @@
             }
         }
 
-        /* Add these styles in the <style> section */
+        /* Update these styles in the <style> section */
         #autoCollector {
             position: absolute;
             width: 30px;
             height: 30px;
-            background-color: rgba(255, 255, 255, 0.8);  /* Make it white with some transparency */
-            border: 2px solid #4CAF50;
+            background: radial-gradient(circle at center,
+                rgba(255, 69, 0, 0.4) 0%,    /* Keeping subtle orange-red core */
+                rgba(139, 0, 0, 0.3) 30%,    /* Keeping subtle dark red middle */
+                rgba(0, 0, 0, 0.9) 60%       /* Keeping black position */
+            );
+            border: 2px solid rgba(255, 0, 0, 0.7);  /* Brighter red border */
             border-radius: 50%;
             pointer-events: none;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
-            transition: width 0.3s, height 0.3s;  /* Smooth size transitions */
+            display: none;
+            transition: width 0.3s, height 0.3s;
+            box-shadow: 
+                0 0 15px rgba(255, 0, 0, 0.6),   /* Brighter red inner glow */
+                0 0 30px rgba(255, 0, 0, 0.4),    /* Extended red glow */
+                0 0 45px rgba(139, 0, 0, 0.3);    /* Additional outer glow layer */
+            animation: pulseBlackHole 3s infinite ease-in-out;
         }
 
-        /* Add glow animation for auto-collected images */
+        @keyframes pulseBlackHole {
+            0% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 
+                    0 0 15px rgba(255, 0, 0, 0.6),
+                    0 0 30px rgba(255, 0, 0, 0.4),
+                    0 0 45px rgba(139, 0, 0, 0.3);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.03);
+                box-shadow: 
+                    0 0 20px rgba(255, 0, 0, 0.7),
+                    0 0 35px rgba(255, 0, 0, 0.5),
+                    0 0 50px rgba(139, 0, 0, 0.4);
+            }
+            100% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 
+                    0 0 15px rgba(255, 0, 0, 0.6),
+                    0 0 30px rgba(255, 0, 0, 0.4),
+                    0 0 45px rgba(139, 0, 0, 0.3);
+            }
+        }
+
+        /* Update the auto-collect glow animation to match the theme */
         @keyframes autoCollectGlow {
-            0% { filter: drop-shadow(0 0 5px red); }
-            50% { filter: drop-shadow(0 0 15px red); }
-            100% { filter: drop-shadow(0 0 5px red); }
+            0% { 
+                filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.8));
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 15px rgba(255, 69, 0, 0.8));
+                transform: scale(0.8);
+            }
+            100% { 
+                filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.8));
+                transform: scale(0);
+            }
         }
 
-        .auto-collect-glow {
-            animation: autoCollectGlow 0.5s ease-out forwards, pop 0.5s ease-out forwards;
+        /* Add these new styles */
+        #sellAllButton.disabled {
+            cursor: not-allowed;
+        }
+
+        #sellAllButton.disabled:hover {
+            background-color: #cc2500;
+        }
+
+        /* Add grid layout for stats and achievements */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;  /* Increased from 20px to 40px for more spacing */
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 0 10px;
+        }
+
+        /* Add inventory space display styles */
+        #inventorySpaceDisplay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 100;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -311,7 +388,9 @@
     Mute
 </button>
     
-<div id="gameArea"></div>
+<div id="gameArea">
+    <div id="inventorySpaceDisplay">0/5</div>
+</div>
 <div id="money">$0</div>
 
 <div class="controls-container">
@@ -333,51 +412,50 @@
 <div class="controls-container">
     <button class="upgradeButton" id="upgradeAutoCollector">Auto Collector ($1000)</button>
     <button class="upgradeButton" id="upgradeCollectorSize">Collector Size ($500)</button>
+    <button class="upgradeButton" id="toggleAutoSell">Auto Sell ($750)</button>
 </div>
 
-<div id="statsDisplay">
-    <div class="stat-item">
-        <span>Drop Size:</span>
-        <span id="currentSize">15px</span>
-    </div>
-    <div class="stat-item">
-        <span>Duration:</span>
-        <span id="currentDuration">1.0s</span>
-    </div>
-    <div class="stat-item">
-        <span>Inventory Space:</span>
-        <span id="currentSpace">5</span>
-    </div>
-    <div class="stat-item">
-        <span>Luck Level:</span>
-        <span id="currentLuck">0</span>
-    </div>
-    <div class="stat-item">
-        <span>Total Clicks:</span>
-        <span id="totalClicks">0</span>
-    </div>
-    <div class="stat-item">
-        <span>Items Found:</span>
-        <span id="totalItems">0</span>
-    </div>
-    <div class="stat-item">
-        <span>Spawn Rate:</span>
-        <span id="currentSpawnRate">50ms</span>
-    </div>
-</div>
-
-<div id="raritiesChances">
-    <ul id="raritiesList"></ul>
-</div>
 <div id="inventory"></div>
 
-<!-- Modify achievements display to be collapsible -->
-<div id="achievementsDisplay">
-    <div id="achievementsHeader" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-        <h3>Achievements (Bonus: <span id="achievementBonus">0</span>%)</h3>
-        <span id="toggleArrow">▼</span>
+<div class="info-grid">
+    <div id="statsDisplay">
+        <div class="stat-item">
+            <span>Drop Size:</span>
+            <span id="currentSize">15px</span>
+        </div>
+        <div class="stat-item">
+            <span>Duration:</span>
+            <span id="currentDuration">1.0s</span>
+        </div>
+        <div class="stat-item">
+            <span>Inventory Space:</span>
+            <span id="currentSpace">5</span>
+        </div>
+        <div class="stat-item">
+            <span>Luck Level:</span>
+            <span id="currentLuck">0</span>
+        </div>
+        <div class="stat-item">
+            <span>Total Clicks:</span>
+            <span id="totalClicks">0</span>
+        </div>
+        <div class="stat-item">
+            <span>Items Found:</span>
+            <span id="totalItems">0</span>
+        </div>
+        <div class="stat-item">
+            <span>Spawn Rate:</span>
+            <span id="currentSpawnRate">50ms</span>
+        </div>
     </div>
-    <div id="achievementsList" style="display: none; max-height: 300px; overflow-y: auto;"></div>
+    
+    <div id="achievementsDisplay">
+        <div id="achievementsHeader" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <h3>Achievements (Bonus: <span id="achievementBonus">0</span>%)</h3>
+            <span id="toggleArrow">▼</span>
+        </div>
+        <div id="achievementsList" style="display: none; max-height: 300px; overflow-y: auto;"></div>
+    </div>
 </div>
 
 <script>
@@ -601,6 +679,9 @@ backgroundMusic.loop = true;
         let hasAutoCollector = JSON.parse(localStorage.getItem('hasAutoCollector')) || false;
         let autoCollectorSize = parseInt(localStorage.getItem('autoCollectorSize')) || 30;
         let collectorSizeCost = parseInt(localStorage.getItem('collectorSizeCost')) || 500;
+        let autoSellEnabled = false;
+        let autoSellPurchased = JSON.parse(localStorage.getItem('autoSellPurchased')) || false;
+        const AUTO_SELL_COST = 100000;
 
 function getRandomrarities() {
     const totalWeight = Object.values(rarities).reduce((sum, weight) => sum + weight, 0);
@@ -648,12 +729,20 @@ function displayImage() {
 
     // Create an image element
     const imgElement = document.createElement('img');
+    imgElement.onerror = function() {
+        console.error('Failed to load image:', highestRarityImage.image);
+        imgElement.remove();
+    };
     imgElement.src = highestRarityImage.image;
     imgElement.className = 'image';
     imgElement.alt = highestRarityImage.rarities;
 
     // Add click/touch handler with effects
     const handleInteraction = function(e) {
+        if (e.target.dataset.processing) {
+            return;
+        }
+        e.target.dataset.processing = true;
         e.preventDefault();
         if (inventory.length < inventoryLimit) {
             stats.totalClicks++;
@@ -704,6 +793,9 @@ function displayImage() {
         } else {
             alert('Inventory is full!');
         }
+        setTimeout(() => {
+            delete e.target.dataset.processing;
+        }, 100);
     };
 
     // Add both mouse and touch event listeners
@@ -743,47 +835,60 @@ function displayImage() {
                   imageRect.bottom < collectorRect.top || 
                   imageRect.top > collectorRect.bottom)) {
                 
-                if (inventory.length < inventoryLimit) {
-                    // Add glow effect before collecting
-                    imgElement.classList.add('auto-collect-glow');
-                    
-                    // Delay the collection to match the animation
-                    setTimeout(() => {
-                        // Update stats
-                        stats.totalClicks++;
-                        stats.totalItems++;
-                        
-                        // Track rarity finds
-                        switch(highestRarityImage.rarities) {
-                            case 'mythical':
-                                stats.mythicalFound++;
-                                shakeScreen();
-                                break;
-                            case 'legendary':
-                                stats.legendaryFound++;
-                                break;
-                            case 'epic':
-                                stats.epicFound++;
-                                break;
-                            case 'rare':
-                                stats.rareFound++;
-                                break;
-                        }
-                        
-                        // Create visual effects
-                        const centerX = imageRect.left + imageRect.width / 2;
-                        const centerY = imageRect.top + imageRect.height / 2;
-                        createCollectEffect(centerX, centerY, highestRarityImage.rarities);
-                        
-                        // Add to inventory and update UI
-                        addToInventory(highestRarityImage.image);
-                        imgElement.remove();
-                        
-                        // Update stats and check achievements
-                        updateStats();
-                        checkAchievements();
-                    }, 500); // Match the animation duration
+                // Add stats
+                stats.totalClicks++;
+                stats.totalItems++;
+                
+                // Track rarity finds
+                switch(highestRarityImage.rarities) {
+                    case 'mythical':
+                        stats.mythicalFound++;
+                        shakeScreen();
+                        break;
+                    case 'legendary':
+                        stats.legendaryFound++;
+                        break;
+                    case 'epic':
+                        stats.epicFound++;
+                        break;
+                    case 'rare':
+                        stats.rareFound++;
+                        break;
                 }
+                
+                // Create visual effects
+                const centerX = imageRect.left + imageRect.width / 2;
+                const centerY = imageRect.top + imageRect.height / 2;
+                createCollectEffect(centerX, centerY, highestRarityImage.rarities);
+                
+                if (autoSellEnabled) {
+                    // Calculate value based on rarity
+                    let value = 0;
+                    switch(highestRarityImage.rarities) {
+                        case 'common': value = 1000000; break;
+                        case 'uncommon': value = 50; break;
+                        case 'rare': value = 100; break;
+                        case 'epic': value = 500; break;
+                        case 'legendary': value = 1000; break;
+                        case 'mythical': value = 7777; break;
+                    }
+                    
+                    // Apply achievement bonus
+                    const bonus = calculateAchievementBonus();
+                    value = Math.floor(value * (1 + bonus / 100));
+                    
+                    // Add money and update display
+                    money += value;
+                    localStorage.setItem('money', money);
+                    updateMoneyDisplay(money, true);
+                } else if (inventory.length < inventoryLimit) {
+                    // Add to inventory if not auto-selling
+                    addToInventory(highestRarityImage.image);
+                }
+                
+                imgElement.remove();
+                updateStats();
+                checkAchievements();
             }
         }
     }
@@ -797,14 +902,25 @@ function displayImage() {
 }
 
         function addToInventory(image) {
+            if (inventory.length >= inventoryLimit) {
+                return false;
+            }
+            if (!image) {
+                return false;
+            }
             inventory.push(image);
             localStorage.setItem('inventory', JSON.stringify(inventory));
             updateInventory();
+            return true;
         }
 
         function updateInventory() {
             const inventoryArea = document.getElementById('inventory');
             inventoryArea.innerHTML = '';
+
+            // Update inventory space display
+            const inventorySpaceDisplay = document.getElementById('inventorySpaceDisplay');
+            inventorySpaceDisplay.textContent = `${inventory.length}/${inventoryLimit}`;
 
             inventory.forEach((image, index) => {
                 const itemDiv = document.createElement('div');
@@ -839,6 +955,8 @@ function displayImage() {
                 emptySlot.appendChild(emptyImg);
                 inventoryArea.appendChild(emptySlot);
             }
+            
+            updateSellAllButton();
         }
 
 function calculateAchievementBonus() {
@@ -859,7 +977,7 @@ function sellItem(index) {
     for (const rarities in images) {
         if (images[rarities].includes(imgSrc)) {
             switch (rarities) {
-                case 'common': raritiesValue = 10; break;
+                case 'common': raritiesValue = 1000000; break;
                 case 'uncommon': raritiesValue = 50; break;
                 case 'rare': raritiesValue = 100; break;
                 case 'epic': raritiesValue = 500; break;
@@ -872,7 +990,7 @@ function sellItem(index) {
 
     // Apply achievement bonus
     const bonus = calculateAchievementBonus();
-    raritiesValue = Math.floor(raritiesValue * (1 + bonus / 100));
+    raritiesValue = Math.max(0, Math.floor(raritiesValue * (1 + bonus / 100)));
 
     money += raritiesValue;
     inventory.splice(index, 1);
@@ -905,45 +1023,52 @@ function updateMultiplierDisplay(multiplier) {
 
 function calculateMaxUpgrades(baseCost, currentMoney) {
     let maxUpgrades = 0;
-    let cost = baseCost;
+    let totalCost = 0;
+    let remainingMoney = currentMoney;
 
-    while (currentMoney >= cost) {
-        maxUpgrades++;
-        currentMoney -= cost;
-        cost = Math.round(cost * 1.1); // Increase cost by 10% for each upgrade
+    while (true) {
+        const nextUpgradeCost = baseCost * Math.pow(10, maxUpgrades);
+        if (remainingMoney >= nextUpgradeCost) {
+            totalCost += nextUpgradeCost;
+            remainingMoney -= nextUpgradeCost;
+            maxUpgrades++;
+        } else {
+            break;
+        }
     }
 
-    return maxUpgrades;
+    return { maxUpgrades, totalCost };
 }
 
 function upgradeImageSize() {
     const baseCost = upgradeCosts.imageSize;
-    let totalCost = baseCost;
-    let upgrades = 1;
+    let totalCost = 0;
+    let upgrades;
 
     if (upgradeMultiplier === 'max') {
-        upgrades = calculateMaxUpgrades(baseCost, money);
-        totalCost = 0;
-        let currentCost = baseCost;
-        for (let i = 0; i < upgrades; i++) {
-            totalCost += currentCost;
-            currentCost = Math.round(currentCost * 1.1);
-        }
+        const result = calculateMaxUpgrades(baseCost, money);
+        upgrades = result.maxUpgrades;
+        totalCost = result.totalCost;
     } else {
         upgrades = upgradeMultiplier;
-        totalCost = baseCost * upgrades;
+        // Calculate total cost with exponential scaling (10x each upgrade)
+        for (let i = 0; i < upgrades; i++) {
+            const currentCost = baseCost * Math.pow(10, i);
+            totalCost += currentCost;
+        }
     }
 
-    if (money >= totalCost) {
+    if (money >= totalCost && upgrades > 0) {
         money -= totalCost;
         imageSize += 5 * upgrades;
+        // Update next upgrade cost with 10x multiplier
         upgradeCosts.imageSize = Math.round(baseCost * Math.pow(10, upgrades));
+        
         localStorage.setItem('money', money);
         localStorage.setItem('imageSize', imageSize);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
         updateMoneyDisplay(money, false);
-        document.getElementById('upgradeImageSize').innerText = `Drop Size ($${upgradeCosts.imageSize})`;
-        document.getElementById('currentSize').innerText = `${imageSize}px`;
+        updateUpgradeButtons();
     } else {
         alert('Not enough money!');
     }
@@ -951,32 +1076,30 @@ function upgradeImageSize() {
 
 function upgradeImageDuration() {
     const baseCost = upgradeCosts.imageDuration;
-    let totalCost = baseCost;
-    let upgrades = 1;
+    let totalCost = 0;
+    let upgrades;
 
     if (upgradeMultiplier === 'max') {
-        upgrades = calculateMaxUpgrades(baseCost, money);
-        totalCost = 0;
-        let currentCost = baseCost;
-        for (let i = 0; i < upgrades; i++) {
-            totalCost += currentCost;
-            currentCost = Math.round(currentCost * 1.1);
-        }
+        const result = calculateMaxUpgrades(baseCost, money);
+        upgrades = result.maxUpgrades;
+        totalCost = result.totalCost;
     } else {
         upgrades = upgradeMultiplier;
-        totalCost = baseCost * upgrades;
+        for (let i = 0; i < upgrades; i++) {
+            totalCost += baseCost * Math.pow(1.5, i);
+        }
     }
 
-    if (money >= totalCost) {
+    if (money >= totalCost && upgrades > 0) {
         money -= totalCost;
         imageDuration += 500 * upgrades;
-        upgradeCosts.imageDuration = Math.round(baseCost * Math.pow(1.1, upgrades));
+        upgradeCosts.imageDuration = Math.round(baseCost * Math.pow(1.5, upgrades));
+        
         localStorage.setItem('money', money);
         localStorage.setItem('imageDuration', imageDuration);
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
         updateMoneyDisplay(money, false);
-        document.getElementById('upgradeImageDuration').innerText = `Drop Duration ($${upgradeCosts.imageDuration})`;
-        document.getElementById('currentDuration').innerText = `${(imageDuration/1000).toFixed(1)}s`;
+        updateUpgradeButtons();
     } else {
         alert('Not enough money!');
     }
@@ -988,13 +1111,8 @@ function upgradeInventorySpace() {
     let upgrades = 1;
 
     if (upgradeMultiplier === 'max') {
-        upgrades = calculateMaxUpgrades(baseCost, money);
-        totalCost = 0;
-        let currentCost = baseCost;
-        for (let i = 0; i < upgrades; i++) {
-            totalCost += currentCost;
-            currentCost = Math.round(currentCost * 1.1);
-        }
+        upgrades = calculateMaxUpgrades(baseCost, money).maxUpgrades;
+        totalCost = calculateMaxUpgrades(baseCost, money).totalCost;
     } else {
         upgrades = upgradeMultiplier;
         totalCost = baseCost * upgrades;
@@ -1017,8 +1135,7 @@ function upgradeInventorySpace() {
 
 function sellAllItems() {
     if (inventory.length === 0) {
-        alert('Inventory is empty!');
-        return;
+        return; // Simply return if inventory is empty, no alert
     }
 
     let totalEarnings = 0;
@@ -1030,7 +1147,7 @@ function sellAllItems() {
         for (const rarities in images) {
             if (images[rarities].includes(imgSrc)) {
                 switch (rarities) {
-                    case 'common': raritiesValue = 10; break;
+                    case 'common': raritiesValue = 1000000; break;
                     case 'uncommon': raritiesValue = 5; break;
                     case 'rare': raritiesValue = 25; break;
                     case 'epic': raritiesValue = 100; break;
@@ -1065,13 +1182,8 @@ function upgradeLuck() {
     let upgrades = 1;
 
     if (upgradeMultiplier === 'max') {
-        upgrades = calculateMaxUpgrades(baseCost, money);
-        totalCost = 0;
-        let currentCost = baseCost;
-        for (let i = 0; i < upgrades; i++) {
-            totalCost += currentCost;
-            currentCost = Math.round(currentCost * 1.1);
-        }
+        upgrades = calculateMaxUpgrades(baseCost, money).maxUpgrades;
+        totalCost = calculateMaxUpgrades(baseCost, money).totalCost;
     } else {
         upgrades = upgradeMultiplier;
         totalCost = baseCost * upgrades;
@@ -1127,17 +1239,30 @@ function addStyleToHead() {
     document.head.appendChild(style);
 }
 
+function formatNumber(num) {
+    const abbreviations = [
+        { value: 1e15, symbol: "Q" },
+        { value: 1e12, symbol: "T" },
+        { value: 1e9, symbol: "B" },
+        { value: 1e6, symbol: "M" },
+        { value: 1e3, symbol: "K" }
+    ];
+
+    for (const { value, symbol } of abbreviations) {
+        if (num >= value) {
+            return (num / value).toFixed(1).replace(/\.0$/, '') + symbol;
+        }
+    }
+    return num.toString();
+}
+
 function updateMoneyDisplay(newMoney, isGain = true) {
     const moneyDisplay = document.getElementById('money');
-    moneyDisplay.innerText = `$${Math.round(newMoney)}`;
+    const displayValue = isNaN(newMoney) ? 0 : Math.round(newMoney);
+    moneyDisplay.innerText = `$${formatNumber(displayValue)}`;
     
-    // Remove existing animation classes
     moneyDisplay.classList.remove('money-gain', 'money-loss');
-    
-    // Force a reflow to restart animation
     void moneyDisplay.offsetWidth;
-    
-    // Add appropriate animation class
     moneyDisplay.classList.add(isGain ? 'money-gain' : 'money-loss');
 }
 
@@ -1168,18 +1293,22 @@ function updateStats() {
 }
 
 function checkAchievements() {
-    let newUnlock = false;
-    for (const [id, achievement] of Object.entries(achievements)) {
-        if (!achievement.unlocked && achievement.check()) {
-            achievement.unlocked = true;
-            newUnlock = true;
-            showAchievementNotification(achievement.name);
-            console.log(`Achievement unlocked: ${achievement.name}`);
+    try {
+        let newUnlock = false;
+        for (const [id, achievement] of Object.entries(achievements)) {
+            if (!achievement.unlocked && achievement.check()) {
+                achievement.unlocked = true;
+                newUnlock = true;
+                showAchievementNotification(achievement.name);
+                console.log(`Achievement unlocked: ${achievement.name}`);
+            }
         }
-    }
-    if (newUnlock) {
-        updateAchievementsDisplay();
-        localStorage.setItem('achievements', JSON.stringify(achievements));
+        if (newUnlock) {
+            updateAchievementsDisplay();
+            localStorage.setItem('achievements', JSON.stringify(achievements));
+        }
+    } catch (e) {
+        console.error('Error checking achievements:', e);
     }
 }
 
@@ -1238,40 +1367,95 @@ function createCollectEffect(x, y, rarity) {
 
 function updateUpgradeButtons() {
     const upgrades = {
-        'upgradeImageSize': upgradeCosts.imageSize,
-        'upgradeImageDuration': upgradeCosts.imageDuration,
-        'upgradeInventorySpace': upgradeCosts.inventorySpace,
-        'upgradeLuck': upgradeCosts.luck,
-        'upgradeSpawnRate': upgradeCosts.spawnRate
+        'upgradeImageSize': {
+            cost: upgradeCosts.imageSize,
+            scaling: 10,
+            name: 'Drop Size'
+        },
+        'upgradeImageDuration': {
+            cost: upgradeCosts.imageDuration,
+            scaling: 1.5,
+            name: 'Drop Duration'
+        },
+        'upgradeInventorySpace': {
+            cost: upgradeCosts.inventorySpace,
+            scaling: 1.5,
+            name: 'Space'
+        },
+        'upgradeLuck': {
+            cost: upgradeCosts.luck,
+            scaling: 1.5,
+            name: 'Luck'
+        },
+        'upgradeSpawnRate': {
+            cost: upgradeCosts.spawnRate,
+            scaling: 1.5,
+            name: 'Spawn Rate'
+        },
+        'upgradeCollectorSize': {
+            cost: collectorSizeCost,
+            scaling: 1.1,
+            name: 'Collector Size'
+        }
     };
 
-    for (const [buttonId, baseCost] of Object.entries(upgrades)) {
-        const button = document.getElementById(buttonId);
-        const multiplier = upgradeMultiplier === 'max' ? 
-            calculateMaxUpgrades(baseCost, money) : 
-            upgradeMultiplier;
-        
-        let totalCost = 0;
-        if (upgradeMultiplier === 'max') {
-            let currentCost = baseCost;
-            for (let i = 0; i < multiplier; i++) {
-                totalCost += currentCost;
-                currentCost = Math.round(currentCost * 1.1);
-            }
+    // Add auto collector button state update
+    const autoCollectorButton = document.getElementById('upgradeAutoCollector');
+    if (!hasAutoCollector) {
+        if (money < upgradeCosts.autoCollector) {
+            autoCollectorButton.classList.add('unaffordable');
+            autoCollectorButton.disabled = true;
         } else {
-            totalCost = baseCost * multiplier;
+            autoCollectorButton.classList.remove('unaffordable');
+            autoCollectorButton.disabled = false;
+        }
+        autoCollectorButton.innerText = `Auto Collector ($${formatNumber(upgradeCosts.autoCollector)})`;
+    }
+
+    for (const [buttonId, upgrade] of Object.entries(upgrades)) {
+        const button = document.getElementById(buttonId);
+        let totalCost = 0;
+        let multiplier = upgradeMultiplier;
+
+        if (upgradeMultiplier === 'max') {
+            let maxUpgrades = 0;
+            let remainingMoney = money;
+            
+            while (remainingMoney >= upgrade.cost * Math.pow(upgrade.scaling, maxUpgrades)) {
+                totalCost += upgrade.cost * Math.pow(upgrade.scaling, maxUpgrades);
+                remainingMoney -= upgrade.cost * Math.pow(upgrade.scaling, maxUpgrades);
+                maxUpgrades++;
+            }
+            multiplier = maxUpgrades;
+        } else {
+            for (let i = 0; i < upgradeMultiplier; i++) {
+                totalCost += upgrade.cost * Math.pow(upgrade.scaling, i);
+            }
         }
 
-        const displayText = {
-            'upgradeImageSize': 'Drop Size',
-            'upgradeImageDuration': 'Drop Duration',
-            'upgradeInventorySpace': 'Space',
-            'upgradeLuck': 'Luck',
-            'upgradeSpawnRate': 'Spawn Rate'
-        };
+        const displayMultiplier = multiplier > 0 ? ` (x${multiplier})` : '';
+        button.innerText = `${upgrade.name}${displayMultiplier} ($${formatNumber(Math.round(totalCost))})`;
+        
+        // Add or remove unaffordable class based on total cost
+        if (money < totalCost) {
+            button.classList.add('unaffordable');
+            button.disabled = true;
+        } else {
+            button.classList.remove('unaffordable');
+            button.disabled = false;
+        }
+    }
 
-        button.innerText = `${displayText[buttonId]} ($${Math.round(totalCost)})`;
-        button.classList.toggle('unaffordable', money < totalCost);
+    // Update auto sell button state if not purchased
+    if (!autoSellPurchased) {
+        const autoSellButton = document.getElementById('toggleAutoSell');
+        if (money < AUTO_SELL_COST) {
+            autoSellButton.classList.add('unaffordable');
+            autoSellButton.disabled = true;
+        } else {
+            autoSellButton.classList.remove('unaffordable');
+            autoSellButton.disabled = false;
+        }
     }
 }
 
@@ -1281,13 +1465,8 @@ function upgradeSpawnRate() {
     let upgrades = 1;
 
     if (upgradeMultiplier === 'max') {
-        upgrades = calculateMaxUpgrades(baseCost, money);
-        totalCost = 0;
-        let currentCost = baseCost;
-        for (let i = 0; i < upgrades; i++) {
-            totalCost += currentCost;
-            currentCost = Math.round(currentCost * 1.1);
-        }
+        upgrades = calculateMaxUpgrades(baseCost, money).maxUpgrades;
+        totalCost = calculateMaxUpgrades(baseCost, money).totalCost;
     } else {
         upgrades = upgradeMultiplier;
         totalCost = baseCost * upgrades;
@@ -1295,7 +1474,7 @@ function upgradeSpawnRate() {
 
     if (money >= totalCost) {
         money -= totalCost;
-        spawnRate = Math.max(10, spawnRate - (2 * upgrades)); // Minimum 10ms spawn rate
+        spawnRate = Math.max(1, Math.min(1000, spawnRate - (2 * upgrades))); // Cap between 10ms and 1000ms
         upgradeCosts.spawnRate = Math.round(baseCost * Math.pow(1.1, upgrades));
         
         localStorage.setItem('money', money);
@@ -1303,7 +1482,7 @@ function upgradeSpawnRate() {
         localStorage.setItem('upgradeCosts', JSON.stringify(upgradeCosts));
         
         updateMoneyDisplay(money, false);
-        document.getElementById('upgradeSpawnRate').innerText = `Spawn Rate ($${upgradeCosts.spawnRate})`;
+        document.getElementById('upgradeSpawnRate').innerText = `Spawn Rate ($${formatNumber(upgradeCosts.spawnRate)})`;
         document.getElementById('currentSpawnRate').innerText = `${spawnRate}ms`;
         
         // Clear existing interval and set new one
@@ -1355,14 +1534,31 @@ function upgradeAutoCollector() {
         localStorage.setItem('hasAutoCollector', JSON.stringify(hasAutoCollector));
         updateMoneyDisplay(money, false);
     } else {
-        alert('Not enough money!');
+        alert(`Not enough money! Need: $${formatNumber(cost)}`);
     }
 }
 
 function upgradeCollectorSize() {
-    if (money >= collectorSizeCost) {
-        money -= collectorSizeCost;
-        autoCollectorSize += 10;
+    const baseCost = collectorSizeCost;
+    let totalCost = 0;
+    let upgrades;
+
+    if (upgradeMultiplier === 'max') {
+        const result = calculateMaxUpgrades(baseCost, money);
+        upgrades = result.maxUpgrades;
+        totalCost = result.totalCost;
+    } else {
+        upgrades = upgradeMultiplier;
+        // Calculate total cost with exponential scaling
+        for (let i = 0; i < upgrades; i++) {
+            const currentCost = baseCost * Math.pow(1.1, i);
+            totalCost += currentCost;
+        }
+    }
+
+    if (money >= totalCost && upgrades > 0) {
+        money -= totalCost;
+        autoCollectorSize += 10 * upgrades;
         
         const collector = document.getElementById('autoCollector');
         if (collector) {
@@ -1370,22 +1566,52 @@ function upgradeCollectorSize() {
             collector.style.height = `${autoCollectorSize}px`;
         }
         
-        collectorSizeCost = Math.round(collectorSizeCost * 1.1);
+        collectorSizeCost = Math.round(baseCost * Math.pow(1.1, upgrades));
         
         localStorage.setItem('money', money);
         localStorage.setItem('autoCollectorSize', autoCollectorSize);
         localStorage.setItem('collectorSizeCost', collectorSizeCost);
         
         updateMoneyDisplay(money, false);
-        document.getElementById('upgradeCollectorSize').innerText = `Collector Size ($${collectorSizeCost})`;
+        updateUpgradeButtons();
     } else {
         alert('Not enough money!');
     }
 }
 
+function updateSellAllButton() {
+    const sellAllButton = document.getElementById('sellAllButton');
+    sellAllButton.classList.toggle('disabled', inventory.length === 0);
+}
+
+function toggleAutoSell() {
+    if (!autoSellPurchased) {
+        if (money >= AUTO_SELL_COST) {
+            money -= AUTO_SELL_COST;
+            autoSellPurchased = true;
+            autoSellEnabled = true;
+            localStorage.setItem('autoSellPurchased', JSON.stringify(autoSellPurchased));
+            localStorage.setItem('money', money);
+            updateMoneyDisplay(money, false);
+        } else {
+            alert('Not enough money!');
+            return;
+        }
+    } else {
+        autoSellEnabled = !autoSellEnabled;
+    }
+
+    const button = document.getElementById('toggleAutoSell');
+    if (autoSellPurchased) {
+        button.innerText = `Auto Sell: ${autoSellEnabled ? 'On' : 'Off'}`;
+        button.style.backgroundColor = autoSellEnabled ? '#004b0a' : '#4CAF50';
+    }
+    localStorage.setItem('autoSellEnabled', JSON.stringify(autoSellEnabled));
+}
+
 window.onload = function() {
     addStyleToHead();
-    document.getElementById('money').innerText = `$${Math.round(money)}`;
+    document.getElementById('money').innerText = `$${formatNumber(Math.round(money))}`;
     updateInventory();
     setInterval(displayImage, 50);
 
@@ -1417,12 +1643,12 @@ window.onload = function() {
     }
 
     // Update button texts with current costs
-    document.getElementById('upgradeImageSize').innerText = `Drop Size ($${Math.round(upgradeCosts.imageSize)})`;
-    document.getElementById('upgradeImageDuration').innerText = `Drop Duration ($${Math.round(upgradeCosts.imageDuration)})`;
-    document.getElementById('upgradeInventorySpace').innerText = `Space ($${Math.round(upgradeCosts.inventorySpace)})`;
-    document.getElementById('upgradeLuck').innerText = `Luck ($${Math.round(upgradeCosts.luck)})`;
-    document.getElementById('upgradeSpawnRate').innerText = `Spawn Rate ($${Math.round(upgradeCosts.spawnRate)})`;
-    document.getElementById('upgradeAutoCollector').innerText = `Auto Collector ($${Math.round(upgradeCosts.autoCollector)})`;
+    document.getElementById('upgradeImageSize').innerText = `Drop Size ($${formatNumber(Math.round(upgradeCosts.imageSize))})`;
+    document.getElementById('upgradeImageDuration').innerText = `Drop Duration ($${formatNumber(Math.round(upgradeCosts.imageDuration))})`;
+    document.getElementById('upgradeInventorySpace').innerText = `Space ($${formatNumber(Math.round(upgradeCosts.inventorySpace))})`;
+    document.getElementById('upgradeLuck').innerText = `Luck ($${formatNumber(Math.round(upgradeCosts.luck))})`;
+    document.getElementById('upgradeSpawnRate').innerText = `Spawn Rate ($${formatNumber(Math.round(upgradeCosts.spawnRate))})`;
+    document.getElementById('upgradeAutoCollector').innerText = `Auto Collector ($${formatNumber(Math.round(upgradeCosts.autoCollector))})`;
 
     // Initialize stats display
     document.getElementById('currentSize').innerText = `${imageSize}px`;
@@ -1433,11 +1659,17 @@ window.onload = function() {
     // Remove the global touch event prevention
     // Only prevent default touch behavior in the game area
     document.getElementById('gameArea').addEventListener('touchmove', function(e) {
-        e.preventDefault();
+        if (e.target.classList.contains('image')) {
+            e.preventDefault();
+        }
     }, { passive: false });
 
-    // Remove the double-tap zoom prevention
-    // The game area touch handling is sufficient
+    // Prevent zoom on double tap
+    document.getElementById('gameArea').addEventListener('touchend', function(e) {
+        if (e.target.classList.contains('image')) {
+            e.preventDefault();
+        }
+    }, false);
 
     // Adjust game area size on orientation change
     window.addEventListener('orientationchange', function() {
@@ -1493,7 +1725,7 @@ window.onload = function() {
 
     // Initialize collector size upgrade button
     document.getElementById('upgradeCollectorSize').onclick = upgradeCollectorSize;
-    document.getElementById('upgradeCollectorSize').innerText = `Collector Size ($${collectorSizeCost})`;
+    document.getElementById('upgradeCollectorSize').innerText = `Collector Size ($${formatNumber(collectorSizeCost)})`;
     
     // Update collector size if it exists
     if (hasAutoCollector) {
@@ -1503,6 +1735,67 @@ window.onload = function() {
             collector.style.height = `${autoCollectorSize}px`;
         }
     }
+
+    // Add this near the start of window.onload
+    if (hasAutoCollector) {
+        const collector = document.createElement('div');
+        collector.id = 'autoCollector';
+        collector.style.display = 'block';
+        collector.style.width = `${autoCollectorSize}px`;
+        collector.style.height = `${autoCollectorSize}px`;
+        
+        // Wait a brief moment for gameArea to be ready
+        setTimeout(() => {
+            const gameArea = document.getElementById('gameArea');
+            if (gameArea) {
+                gameArea.appendChild(collector);
+            }
+        }, 100);
+    }
+
+    // Add error handling for localStorage
+    function saveToLocalStorage(key, value) {
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+            console.error('Failed to save to localStorage:', e);
+        }
+    }
+
+    // Add proper touch event handling
+    document.getElementById('gameArea').addEventListener('touchmove', function(e) {
+        if (e.target.classList.contains('image')) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // Prevent zoom on double tap
+    document.getElementById('gameArea').addEventListener('touchend', function(e) {
+        if (e.target.classList.contains('image')) {
+            e.preventDefault();
+        }
+    }, false);
+
+    // Add proper cleanup of intervals on page unload
+    window.onbeforeunload = function() {
+        if (window.spawnInterval) {
+            clearInterval(window.spawnInterval);
+        }
+    };
+
+    // Initialize auto sell button
+    const autoSellButton = document.getElementById('toggleAutoSell');
+    if (autoSellPurchased) {
+        autoSellEnabled = JSON.parse(localStorage.getItem('autoSellEnabled')) || false;
+        autoSellButton.innerText = `Auto Sell: ${autoSellEnabled ? 'On' : 'Off'}`;
+        autoSellButton.style.backgroundColor = autoSellEnabled ? '#004b0a' : '#4CAF50';
+    } else {
+        autoSellButton.innerText = `Auto Sell ($${AUTO_SELL_COST})`;
+        if (money < AUTO_SELL_COST) {
+            autoSellButton.classList.add('unaffordable');
+        }
+    }
+    autoSellButton.onclick = toggleAutoSell;
 };
     </script>
 
